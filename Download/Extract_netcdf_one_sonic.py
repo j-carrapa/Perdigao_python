@@ -9,18 +9,40 @@ Created on Tue May 10 23:03:34 2022
 from netCDF4 import Dataset
 import numpy as np
 import pandas as pd
+import Tower_location as tl
+
 
 
 # Reading the netcd file
 data = Dataset("isfs_qc_tiltcor_20170601.nc", 'r')
 
+# Array with tower name code
 
-# escolha do mastro, falta fazer função de input
-x = 'tse05'
+t_name = np.array(["tnw01", "tnw02", "tnw03", "tnw04", "tnw05", "tnw06", "tnw07", "tnw08", "tnw09", "tnw10", "tnw11", "tnw12", "tnw13", "tnw14", "tnw15", "tnw16", "tse01", "tse02", "tse04", "tse05", "tse06", "tse07", "tse08", "tse09", "tse10", "tse11", "tse12", "tse13", "rsw01", "rsw02", "rsw03", "rsw04", "rsw05", "rsw06", "rsw07", "rsw08", "rne01", "rne02", "rne03", "rne04", "rne06", "rne07", "v01", "v03", "v04", "v05", "v06", "v07", "Extreme_SW", "Extreme_NE"])
+
+
+# Ask for input of tower code name, the code will not continue until a valid code name is given
+
+a1 = 0
+
+while a1 != 1:
+    j = 0
+    x = input("Tower name code:")
+    for a in t_name:
+        if x == a:
+            a1 = 1
+            break
+        j = j + 1
+    if a1 != 1:
+        print("Code name incorrect")
+        
+    continue   
+          
+
 
 # Neste ficheiro não existem coordenadas para algumas torres, verificar se é geral
 
-if x != "tse05" and x != "tnw04":
+if x != "tnw04" and x != "tnw12" and x != "tnw13" and x != "tnw14" and x != "tnw15" and x != "tnw16" and x != "tse05" and x != "Extreme_SW" and x != "Extreme_NE":
 
     lat = data.variables['latitude_{}'.format(x)]
     lat_data = data.variables['latitude_{}'.format(x)][:]
@@ -29,10 +51,63 @@ if x != "tse05" and x != "tnw04":
     lon_data = data.variables['longitude_{}'.format(x)][:]
 
 
+# Display which sonics heights are available for that tower
 
-# escolha do anemómetro, falta fazer função de input
+height = np.array(["2m", "4m", "6m", "8m", "10m", "20m", "30m", "40m", "60m", "80m", "100m"])
 
-y = '2m'
+i = 0
+while i < 12:
+    if tl.m[i,j] == 1:
+        print(height[i])
+    
+    i = i + 1
+    continue
+
+
+
+#  Ask for input of sonic height, the code will not continue until a valid height for the choosen tower is given
+
+
+
+a3 = 0
+while a3 != 1:
+    a2 = 0
+    while a2 != 1:
+        i = 0
+        y = input("Tower height:")
+        for b in height:
+            if y == b:
+                a2 = 1
+                break
+            i = i + 1
+        
+        if a2 != 1:
+            print("Select an appropriate height")
+            
+        continue 
+    if tl.m[i,j] == 1:
+        a3 = 1
+    else:
+        print("This tower doesn't have sonics for {} heihgt, select an appropriate height".format(y))
+    continue
+
+
+'''
+i = 0
+while i != 1:
+    y = input("Tower height:")
+    for b in height:
+        if y == b:
+            i = 1
+            break
+    if i != 1:
+        print("This tower doesn't have a sonic for that height")
+        
+    continue   
+'''
+
+
+
 
 # Extracção dos valores das variáveis
 
@@ -75,4 +150,8 @@ P_P__2m_tse05_data = data.variables['P_P__2m_tse05'][:]
 
 
 #print(data.variables.keys())
+
+# Joining every variables of interest in one numpy array
+
+
 
