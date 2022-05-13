@@ -12,11 +12,11 @@ import numpy as np
 import pandas as pd
 
 
-data = Dataset("isfs_qc_tiltcor_20170630.nc", 'r')
+data = Dataset("isfs_qc_tiltcor_20170601.nc", 'r')
 
 #print(data)
 
-#print(data.variables.keys())
+print(data.variables.keys())
 
 sites = data.variables['sites']
 
