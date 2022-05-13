@@ -12,7 +12,10 @@ import pandas as pd
 
 
 # Reading the netcd file
-data = Dataset("isfs_qc_tiltcor_20170630.nc", 'r')
+
+fi = "isfs_qc_tiltcor_20170630.nc"
+
+data = Dataset("{}".format(fi) , 'r')
 
 # Storing the lat and lon data into variables
 lat_tnw01 = data.variables['latitude_tnw01']
@@ -109,3 +112,11 @@ n_variables[0] = temp + str(x)'''
 #print(n_variables)
 
 #vel=np.array(ncfile['VEL'][:])
+
+
+
+# Saving the Data frame into a CSV and a Excel file
+
+df.to_csv('file1.csv')
+
+df.to_excel('file1.xls')
