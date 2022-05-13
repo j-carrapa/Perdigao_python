@@ -14,7 +14,7 @@ import numpy as np
 # usar pyproj para fazer a conversão das coordenadas inseridas manualmente
 
 
-
+# Part 1
 
 # Reading the netcd file
 data = Dataset("isfs_qc_tiltcor_20170601.nc", 'r')
@@ -37,14 +37,18 @@ for x in t_name:
         lon = data.variables['longitude_{}'.format(x)]
         lon_data = data.variables['longitude_{}'.format(x)][:]
     except KeyError:
-        print("The {} variable has no geo coordinates".format(x))
+        #print("The {} variable has no geo coordinates".format(x))
+        continue
     except:
-        print("There is other problem with the {} variable".format(x))
+        #print("There is other problem with the {} variable".format(x))
+        continue
     else:
         lat_n[i] = lat_data
         lon_n[i] = lon_data
     finally:
         i = i + 1
+
+# The 'print' on the exceptions where hidden in order not to fill the 'Out' whith messages
 
 
 # inserir manualmente os valores em falta, foi feita uma conversão manual das coordenadas que deve ser revista (possivelmente usando pyproj)
@@ -123,3 +127,50 @@ for x in t_name:
 
 
 '''
+
+# Part 2
+
+# Map which heights the wind speed sonics are in each tower
+
+# 2m, 4m, 6m, 8m, 10m, 12m, 20m, 30m, 40m, 60m, 80m, 100,
+
+height = np.array(["2m", "4m", "6m", "8m", "10m", "20m", "30m", "40m", "60m", "80m", "100m"])
+  
+
+# This 2D array is initiallized with zeros "0"
+
+m = np.zeros((12,50))
+
+
+# This 'for loop' will check in each tower, if there are wind speed values for the different heights. If true, it will change the 'm' array from '0' to '1' in the correspondent position for the height in each tower
+# In the end, the 'm' array contains boolean info on whether or not one specific tower has a sonic in a specific heihgt, for every tower, and every heights
+
+
+
+j = 0
+
+for a in t_name:
+    
+    i = 0
+    
+    for b in height:
+        try:
+            u = data.variables['u_{}_{}'.format(b, a)][:]
+
+        except KeyError:
+            #print("The {} height is not present in tower {}".format(b, a))
+            continue
+        except:
+            #print("There is other problem with the {} variable".format(a))
+            continue
+        else:
+            m[i,j] = 1
+
+        finally:
+            i = i + 1
+    j = j +1
+
+# The 'print' on the exceptions where hidden in order not to fill the 'Out' whith messages
+
+
+
