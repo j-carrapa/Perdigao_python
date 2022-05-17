@@ -120,3 +120,10 @@ n_variables[0] = temp + str(x)'''
 df.to_csv('file1.csv')
 
 df.to_excel('file1.xls')
+
+# When converting the df to a np array the file is loosing the info on the time variable (used as index in the df)
+# Possible solution is create a new df whith  the time series as a column, as well as index
+
+
+df_np = df.to_numpy()
+np.savetxt("file1.txt", df_np, fmt = "%.4f")
