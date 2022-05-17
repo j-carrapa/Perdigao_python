@@ -27,43 +27,50 @@ import requests
 import numpy as np
 
 
+
 '''----- PARTE 1 ----------'''
 
-# Dias de Novembro e Dezembro de 2016 - meses em que não existem dados para todos os dias
+# The array 'dates' will contain all the dates of the days with available data
 
-dates = np.array([61129, 61201, 61202, 61205], dtype='i4')
+dates = np.array([20161129, 20161201, 20161202, 20161205], dtype='i4')
+
 
 i = 7
 
 
 while i<10:
-    s = '6120'+ str(i)
+    s = '2016120'+ str(i)
     temp = np.array(s, dtype='i4')
     dates = np.append(dates, [temp])
     i = i+1
 
-dates = np.append(dates, [61210])
+dates = np.append(dates, [20161210])
 
+# Array with the dates of the days with available data for the months of November and Dezember of 2016
 
+dates_16 = dates
 
+# Filling the 'dates' array with the remaining dates of the year 2017
 
 j = 1
 i = 16
 
-# 1- Janeiro, 3- Março, 5- Maio meses de 31 dias
-# 2- Fevereiro - 29 dias
-# 4- Abril, 6- Junho
+# Array with the dates of the days with available data for the months from January until July of 2017
+
+# 1- January, 3- March, 5- May months with 31 days
+# 2- February - 29 days
+# 4- April, 6- June
 
 while j<7:
     if j == 1 or j == 3 or j == 5:
         while i < 10:
-            s = '70' + str(j)+'0'+ str(i)
+            s = '20170' + str(j)+'0'+ str(i)
             temp = np.array(s, dtype='i4')
             dates = np.append(dates, [temp])
             i = i+1
         else:
             while i <32:
-                s = '70' + str(j)+ str(i)
+                s = '20170' + str(j)+ str(i)
                 temp = np.array(s, dtype='i4')
                 dates = np.append(dates, [temp])
                 i = i+1
@@ -72,13 +79,13 @@ while j<7:
         
     if j == 2:
         while i <10:
-            s = '70' + str(j)+ '0' + str(i)
+            s = '20170' + str(j)+ '0' + str(i)
             temp = np.array(s, dtype='i4')
             dates = np.append(dates, [temp])
             i = i+1
         else:
             while i <29:
-                s = '70' + str(j)+ str(i)
+                s = '20170' + str(j)+ str(i)
                 temp = np.array(s, dtype='i4')
                 dates = np.append(dates, [temp])
                 i = i+1
@@ -86,13 +93,13 @@ while j<7:
                 i = 1
     if j == 4 or j == 6:
         while i <10:
-            s = '70' + str(j)+ '0' + str(i)
+            s = '20170' + str(j)+ '0' + str(i)
             temp = np.array(s, dtype='i4')
             dates = np.append(dates, [temp])
             i = i+1
         else:
             while i < 31:
-                s = '70' + str(j)+ str(i)
+                s = '20170' + str(j)+ str(i)
                 temp = np.array(s, dtype='i4')
                 dates = np.append(dates, [temp])
                 i = i+1
@@ -101,23 +108,32 @@ while j<7:
     j = j+1
 
 else:
-    dates = np.append(dates, [70701])
+    dates = np.append(dates, [20170701])
+
+
+dates_tot = dates
 
 #print(dates)
-#Só para verificação
+#just for checking
 
 
 '''----- PARTE 2 ----------'''
 
 #esta parte foi retirada de : https://www.youtube.com/watch?v=XGUS6DYZfCc&list=PLLxyyob7YmEE8S3QDs1PZQkiBxA4zn_Gx&index=7
-
+#antes
+'''
 for date in dates:
     url = 'http://windsptds.fe.up.pt/thredds/fileServer/flux/NCAR-EOL%20Quality%20Controlled%205-minute%20ISFS%20surface%20flux%20data,%20geographic%20coordinate,%20tilt%20corrected/isfs_qc_tiltcor_201'+ str(date) +'.nc'
     r = requests.get(url)
     open('201' + str(date)+'.nc','wb').write(r.content)
+'''
 
+#Depois
 
-
+for date in dates:
+    url = 'http://windsptds.fe.up.pt/thredds/fileServer/flux/NCAR-EOL%20Quality%20Controlled%205-minute%20ISFS%20surface%20flux%20data,%20geographic%20coordinate,%20tilt%20corrected/isfs_qc_tiltcor_'+ str(date) +'.nc'
+    r = requests.get(url)
+    open(str(date)+'.nc','wb').write(r.content)
 
 
 
