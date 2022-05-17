@@ -1,3 +1,0 @@
-Hello! Welcome to myfile.txt
-This file is for testing purposes.
-Good Luck!
