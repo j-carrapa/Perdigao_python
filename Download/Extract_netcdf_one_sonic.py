@@ -14,7 +14,10 @@ import Tower_location as tl
 
 
 # Reading the netcd file
-data = Dataset("isfs_qc_tiltcor_20170601.nc", 'r')
+
+fi = "isfs_qc_tiltcor_20170601.nc"
+
+data = Dataset("{}".format(fi) , 'r')
 
 # Array with tower name code
 
