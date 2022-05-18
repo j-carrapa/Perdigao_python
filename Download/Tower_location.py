@@ -11,6 +11,14 @@ from netCDF4 import Dataset
 import numpy as np
 
 
+''' 18 May
+Updates log
+change the heights list from the XXXm format to the XXX format
+
+
+
+'''
+
 # usar pyproj para fazer a conversão das coordenadas inseridas manualmente
 
 
@@ -134,7 +142,7 @@ for x in t_name:
 
 # 2m, 4m, 6m, 8m, 10m, 12m, 20m, 30m, 40m, 60m, 80m, 100,
 
-height = np.array(["2m", "4m", "6m", "8m", "10m", "20m", "30m", "40m", "60m", "80m", "100m"])
+height = np.array(["2", "4", "6", "8", "10", "20", "30", "40", "60", "80", "100"])
   
 
 # This 2D array is initiallized with zeros "0"
@@ -155,7 +163,7 @@ for a in t_name:
     
     for b in height:
         try:
-            u = data.variables['u_{}_{}'.format(b, a)][:]
+            u = data.variables['u_{}m_{}'.format(b, a)][:]
 
         except KeyError:
             #print("The {} height is not present in tower {}".format(b, a))
