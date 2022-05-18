@@ -15,6 +15,19 @@ import pandas as pd
 import Tower_location as tl
 import requests
 
+''' 18 May
+Updates log
+change the heights list from the XXXm format to the XXX format
+Define print statements of what processes are occuring (ex: Downloading...)
+There was an error when the start date was the same of the end date. It is now solved
+Updated the time stamp in the second column of the data frame, to assure that the time variable is continuous when passing from one day to another
+
+
+
+
+'''
+
+
 
 '''----- PARTE 1 ----------'''
 
@@ -169,15 +182,19 @@ for q in dates_tot:
 
 '''----- PART 3 ----------'''
 
-
+'''
 # - Download the files defined by the user
+
+print("Downloading...")
+
+# Just to explain user what is happening
 
 for date in dates_def:
     url = 'http://windsptds.fe.up.pt/thredds/fileServer/flux/NCAR-EOL%20Quality%20Controlled%205-minute%20ISFS%20surface%20flux%20data,%20geographic%20coordinate,%20tilt%20corrected/isfs_qc_tiltcor_'+ str(date) +'.nc'
     r = requests.get(url)
     open(str(date)+'.nc','wb').write(r.content)
 
-    
+'''    
  
 '''----- PART 4 ----------'''
    
@@ -191,7 +208,7 @@ t_name = np.array(["tnw01", "tnw02", "tnw03", "tnw04", "tnw05", "tnw06", "tnw07"
 
 # Array with tower heights
 
-height = np.array(["2m", "4m", "6m", "8m", "10m", "20m", "30m", "40m", "60m", "80m", "100m"])
+height = np.array(["2", "4", "6", "8", "10", "20", "30", "40", "60", "80", "100"])
 
 
 # Ask for input of tower code name, the code will not continue until a valid code name is given
@@ -258,6 +275,9 @@ while a3 != 1:
 
 '''----- PART 5 ----------'''
 
+print("Gathering data and exporting")
+
+# Just to explain user what is happening
 
 #  Call the extraction module and concatenate the data in order, using time as index
 
@@ -267,6 +287,7 @@ while a3 != 1:
 #fi, x and y will be given by the main input
 
 m = 0
+n = 0
 fi = str(z)
 data = Dataset("{}.nc".format(fi) , 'r')
 # Creating an empty pandas dataframe
@@ -275,27 +296,84 @@ ending_time = data.variables['time'].units[14:25]+ '23:57:30'
 time_range = pd.date_range(start= starting_time, end= ending_time, periods= 288)
 dfc = pd.DataFrame(0, columns= ['basetime', 'time', 'u','v', 'w', 'vh', 'dir','uu', 'vv', 'ww', 'uv', 'uw', 'vw'], index = time_range)
 
+try:
+    for z in dates_def:
+        fi = str(z)
+        data = Dataset("{}.nc".format(fi) , 'r')
+        
+        # Storing the netCDF data into variables
 
-for z in dates_def:
+        u = data.variables['u_{}m_{}'.format(y, x)]
+        v = data.variables['v_{}m_{}'.format(y, x)]
+        w = data.variables['w_{}m_{}'.format(y, x)]
+
+        uu = data.variables['u_u__{}m_{}'.format(y, x)]
+        uv = data.variables['u_v__{}m_{}'.format(y, x)]
+        uw = data.variables['u_w__{}m_{}'.format(y, x)]
+        vv = data.variables['v_v__{}m_{}'.format(y, x)]
+        vw = data.variables['v_w__{}m_{}'.format(y, x)]
+        ww = data.variables['w_w__{}m_{}'.format(y, x)]
+
+        direc = data.variables['dir_{}m_{}'.format(y, x)]
+        spd = data.variables['spd_{}m_{}'.format(y, x)]
+        ldiag = data.variables['ldiag_{}m_{}'.format(y, x)]
+
+        basetime = data.variables['base_time']
+        reltime = data.variables['time']
+
+
+        # Creating an empty pandas dataframe
+        starting_time = data.variables['time'].units[14:29]+ '2:30'
+        ending_time = data.variables['time'].units[14:25]+ '23:57:30'
+        time_range = pd.date_range(start= starting_time, end= ending_time, periods= 288)
+
+        df = pd.DataFrame(0, columns= ['basetime', 'time', 'u','v', 'w', 'vh', 'dir','uu', 'vv', 'ww', 'uv', 'uw', 'vw'], index = time_range)
+
+        # Create a numpy array with the size of the time variable
+
+        dt = np.arange(0, data.variables['time'].size)
+
+        # Filling the empty pandas data frame with the values of the variables for each time value
+
+        for time_index in dt:
+            df.iloc[time_index] = basetime[time_index], reltime[time_index] + 86400*n, u[time_index], v[time_index], w[time_index], spd[time_index], direc[time_index], uu[time_index], vv[time_index], ww[time_index], uv[time_index], uw[time_index], vw[time_index]
+            
+        n = n + 1
+
+    '''
+    # concatenate in one single dataframe all of the required info
+
+        if m == 1:
+            frames.append(df)
+            result = pd.concat(frames)
+            dfc = result.copy()
+            frames = [dfc]
+            
+        if m == 0:
+            dfc = df.copy()
+            frames = [dfc]
+            m = 1
+    '''
+except:
     fi = str(z)
     data = Dataset("{}.nc".format(fi) , 'r')
     
     # Storing the netCDF data into variables
 
-    u = data.variables['u_{}_{}'.format(y, x)]
-    v = data.variables['v_{}_{}'.format(y, x)]
-    w = data.variables['w_{}_{}'.format(y, x)]
+    u = data.variables['u_{}m_{}'.format(y, x)]
+    v = data.variables['v_{}m_{}'.format(y, x)]
+    w = data.variables['w_{}m_{}'.format(y, x)]
 
-    uu = data.variables['u_u__{}_{}'.format(y, x)]
-    uv = data.variables['u_v__{}_{}'.format(y, x)]
-    uw = data.variables['u_w__{}_{}'.format(y, x)]
-    vv = data.variables['v_v__{}_{}'.format(y, x)]
-    vw = data.variables['v_w__{}_{}'.format(y, x)]
-    ww = data.variables['w_w__{}_{}'.format(y, x)]
+    uu = data.variables['u_u__{}m_{}'.format(y, x)]
+    uv = data.variables['u_v__{}m_{}'.format(y, x)]
+    uw = data.variables['u_w__{}m_{}'.format(y, x)]
+    vv = data.variables['v_v__{}m_{}'.format(y, x)]
+    vw = data.variables['v_w__{}m_{}'.format(y, x)]
+    ww = data.variables['w_w__{}m_{}'.format(y, x)]
 
-    direc = data.variables['dir_{}_{}'.format(y, x)]
-    spd = data.variables['spd_{}_{}'.format(y, x)]
-    ldiag = data.variables['ldiag_{}_{}'.format(y, x)]
+    direc = data.variables['dir_{}m_{}'.format(y, x)]
+    spd = data.variables['spd_{}m_{}'.format(y, x)]
+    ldiag = data.variables['ldiag_{}m_{}'.format(y, x)]
 
     basetime = data.variables['base_time']
     reltime = data.variables['time']
@@ -317,23 +395,14 @@ for z in dates_def:
     for time_index in dt:
         df.iloc[time_index] = basetime[time_index], reltime[time_index], u[time_index], v[time_index], w[time_index], spd[time_index], direc[time_index], uu[time_index], vv[time_index], ww[time_index], uv[time_index], uw[time_index], vw[time_index]
 
+    dfc = df.copy()
 
-# concatenate in one single dataframe all of the required info
-
-    if m == 1:
-        frames.append(df)
-        result = pd.concat(frames)
-        dfc = result.copy()
-        frames = [dfc]
-        
-    if m == 0:
-        dfc = df.copy()
-        frames = [dfc]
-        m = 1
-
+finally:
+    print("File exported")
+    
         
 '''----- PART 6 ----------'''
-
+'''
       
 # Saving the Data frame into a CSV and a Excel file
 
@@ -348,4 +417,4 @@ dfc.to_excel('file1.xls')
 df_np = dfc.to_numpy()
 np.savetxt("file1.txt", df_np, fmt = "%.4f")
     
-
+'''
