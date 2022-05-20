@@ -24,7 +24,11 @@ Updated the time stamp in the second column of the data frame, to assure that th
 
 
 
+20 may
 
+Changed some variable names to avoid misunderstandings
+Changed the saving and exporting code to get the files name with the following format: "[sonic height]_[tower code name]_[starting date]_[end date]"
+The app can now extract and export multiple sonics
 '''
 
 
@@ -126,10 +130,10 @@ dates_tot = dates
 a4 = 0
 
 while a4 != 1:
-    z = input("Select start date with the format, YYYYMMDD:")
-    z = int(z)
+    z1 = input("Select start date with the format, YYYYMMDD:")
+    z1 = int(z1)
     for c in dates_tot:
-        if z == c:
+        if z1 == c:
             a4 = 1
             break
     if a4 != 1:
@@ -142,11 +146,11 @@ while a4 != 1:
 a5 = 0
 
 while a5 != 1:
-    w = input("Select end date with the format, YYYYMMDD:")
-    w = int(w)
+    z2 = input("Select end date with the format, YYYYMMDD:")
+    z2 = int(z2)
     for c in dates_tot:
-        if w == c:
-            if w >= z:
+        if z2 == c:
+            if z2 >= z1:
                 a5 = 1
                 break
             else:
@@ -158,7 +162,7 @@ while a5 != 1:
         print("Possible start dates:")
     continue
 
-# using defined sart and end dates (z, w) to create an array with the defined dates
+# using defined sart and end dates (z1, z2) to create an array with the defined dates
 # This for cycle is showing an error (dates_def appears first for append than for creation, the fact is that the if line for the append will not ever be executed before the if line for creation). 
 # Is it necessary to create an empty array first???
 #dates_def = np.array(0, dtype = 'i4')
@@ -169,10 +173,10 @@ for q in dates_tot:
     if a6 == 1:
         temp = np.array(q, dtype='i4')
         dates_def = np.append(dates_def, [temp])    
-    if z == q:
-        dates_def = np.array(z, dtype = 'i4')
+    if z1 == q:
+        dates_def = np.array(z1, dtype = 'i4')
         a6 = 1
-    if w == q:
+    if z2 == q:
         a6 = 0
 
 # the array dates_def contains all the dates defined by the user for extracting data, every position of the array contains the date of 1 day with the format YYYYMMDD
@@ -213,92 +217,155 @@ height = np.array(["2", "4", "6", "8", "10", "20", "30", "40", "60", "80", "100"
 
 # Ask for input of tower code name, the code will not continue until a valid code name is given
 
-a1 = 0
+g1 = 0
 
-while a1 != 1:
-    j = 0
-    x = input("Tower name code:")
-    for a in t_name:
-        if x == a:
-            a1 = 1
-            break
-        j = j + 1
-    if a1 != 1:
-        print("Code name incorrect")
-        
-    continue   
-          
-# Display which sonics heights are available for that tower
-
-
-i = 0
-while i < 12:
-    if tl.m[i,j] == 1:
-        print(height[i])
+while g1 != 1:
     
-    i = i + 1
-    continue
+    g2 = 0
+    
+    a1 = 0
 
-
-#  Ask for input of sonic height, the code will not continue until a valid height for the choosen tower is given
-
-
-a3 = 0
-while a3 != 1:
-    a2 = 0
-    while a2 != 1:
-        i = 0
-        y = input("Tower height:")
-        for b in height:
-            if y == b:
-                a2 = 1
+    while a1 != 1:
+        j = 0
+        x = input("Tower name code:")
+        for a in t_name:
+            if x == a:
+                a1 = 1
                 break
-            i = i + 1
-        
-        if a2 != 1:
-            print("Select an appropriate height")
+            j = j + 1
+        if a1 != 1:
+            print("Code name incorrect")
             
-        continue 
-    if tl.m[i,j] == 1:
-        a3 = 1
-    else:
-        print("This tower doesn't have sonics for {} heihgt, select an appropriate height".format(y))
-    continue
+        continue   
+              
+    # Display which sonics heights are available for that tower
 
 
-# x: tower code name
-# y: height code name
+    i = 0
+    while i < 12:
+        if tl.m[i,j] == 1:
+            print(height[i])
+        
+        i = i + 1
+        continue
 
 
-# At this point we have the dates defined by the user, the tower and the height relative to one sonic
+    #  Ask for input of sonic height, the code will not continue until a valid height for the choosen tower is given
 
 
-'''----- PART 5 ----------'''
+    a3 = 0
+    while a3 != 1:
+        a2 = 0
+        while a2 != 1:
+            i = 0
+            y = input("Tower height:")
+            for b in height:
+                if y == b:
+                    a2 = 1
+                    break
+                i = i + 1
+            
+            if a2 != 1:
+                print("Select an appropriate height")
+                
+            continue 
+        if tl.m[i,j] == 1:
+            a3 = 1
+        else:
+            print("This tower doesn't have sonics for {} heihgt, select an appropriate height".format(y))
+        continue
 
-print("Gathering data and exporting")
 
-# Just to explain user what is happening
+    # x: tower code name
+    # y: height code name
 
-#  Call the extraction module and concatenate the data in order, using time as index
 
-# don't know how to call it from a module, will put everything in this file
+    # At this point we have the dates defined by the user, the tower and the height relative to one sonic
 
-# Reading the netcd file
-#fi, x and y will be given by the main input
 
-m = 0
-n = 0
-fi = str(z)
-data = Dataset("{}.nc".format(fi) , 'r')
-# Creating an empty pandas dataframe
-starting_time = data.variables['time'].units[14:29]+ '2:30'
-ending_time = data.variables['time'].units[14:25]+ '23:57:30'
-time_range = pd.date_range(start= starting_time, end= ending_time, periods= 288)
-dfc = pd.DataFrame(0, columns= ['basetime', 'time', 'u','v', 'w', 'vh', 'dir','uu', 'vv', 'ww', 'uv', 'uw', 'vw'], index = time_range)
+    '''----- PART 5 ----------'''
 
-try:
-    for z in dates_def:
-        fi = str(z)
+    print("Gathering data and exporting")
+
+    # Just to explain user what is happening
+
+    #  Call the extraction module and concatenate the data in order, using time as index
+
+    # don't know how to call it from a module, will put everything in this file
+
+    # Reading the netcd file
+    #fi, x and y will be given by the main input
+
+    m = 0
+    n = 0
+    fi = str(z1)
+    data = Dataset("{}.nc".format(fi) , 'r')
+    # Creating an empty pandas dataframe
+    starting_time = data.variables['time'].units[14:29]+ '2:30'
+    ending_time = data.variables['time'].units[14:25]+ '23:57:30'
+    time_range = pd.date_range(start= starting_time, end= ending_time, periods= 288)
+    dfc = pd.DataFrame(0, columns= ['basetime', 'time', 'u','v', 'w', 'vh', 'dir','uu', 'vv', 'ww', 'uv', 'uw', 'vw'], index = time_range)
+
+    try:
+        for z in dates_def:
+            fi = str(z1)
+            data = Dataset("{}.nc".format(fi) , 'r')
+            
+            # Storing the netCDF data into variables
+
+            u = data.variables['u_{}m_{}'.format(y, x)]
+            v = data.variables['v_{}m_{}'.format(y, x)]
+            w = data.variables['w_{}m_{}'.format(y, x)]
+
+            uu = data.variables['u_u__{}m_{}'.format(y, x)]
+            uv = data.variables['u_v__{}m_{}'.format(y, x)]
+            uw = data.variables['u_w__{}m_{}'.format(y, x)]
+            vv = data.variables['v_v__{}m_{}'.format(y, x)]
+            vw = data.variables['v_w__{}m_{}'.format(y, x)]
+            ww = data.variables['w_w__{}m_{}'.format(y, x)]
+
+            direc = data.variables['dir_{}m_{}'.format(y, x)]
+            spd = data.variables['spd_{}m_{}'.format(y, x)]
+            ldiag = data.variables['ldiag_{}m_{}'.format(y, x)]
+
+            basetime = data.variables['base_time']
+            reltime = data.variables['time']
+
+
+            # Creating an empty pandas dataframe
+            starting_time = data.variables['time'].units[14:29]+ '2:30'
+            ending_time = data.variables['time'].units[14:25]+ '23:57:30'
+            time_range = pd.date_range(start= starting_time, end= ending_time, periods= 288)
+
+            df = pd.DataFrame(0, columns= ['basetime', 'time', 'u','v', 'w', 'vh', 'dir','uu', 'vv', 'ww', 'uv', 'uw', 'vw'], index = time_range)
+
+            # Create a numpy array with the size of the time variable
+
+            dt = np.arange(0, data.variables['time'].size)
+
+            # Filling the empty pandas data frame with the values of the variables for each time value
+
+            for time_index in dt:
+                df.iloc[time_index] = basetime[time_index], reltime[time_index] + 86400*n, u[time_index], v[time_index], w[time_index], spd[time_index], direc[time_index], uu[time_index], vv[time_index], ww[time_index], uv[time_index], uw[time_index], vw[time_index]
+                
+            n = n + 1
+
+        
+        # concatenate in one single dataframe all of the required info
+
+            if m == 1:
+                frames.append(df)
+                result = pd.concat(frames)
+                dfc = result.copy()
+                frames = [dfc]
+                
+            if m == 0:
+                dfc = df.copy()
+                frames = [dfc]
+                m = 1
+        
+    except:
+        fi = str(z1)
         data = Dataset("{}.nc".format(fi) , 'r')
         
         # Storing the netCDF data into variables
@@ -336,85 +403,75 @@ try:
         # Filling the empty pandas data frame with the values of the variables for each time value
 
         for time_index in dt:
-            df.iloc[time_index] = basetime[time_index], reltime[time_index] + 86400*n, u[time_index], v[time_index], w[time_index], spd[time_index], direc[time_index], uu[time_index], vv[time_index], ww[time_index], uv[time_index], uw[time_index], vw[time_index]
-            
-        n = n + 1
+            df.iloc[time_index] = basetime[time_index], reltime[time_index], u[time_index], v[time_index], w[time_index], spd[time_index], direc[time_index], uu[time_index], vv[time_index], ww[time_index], uv[time_index], uw[time_index], vw[time_index]
 
-    '''
-    # concatenate in one single dataframe all of the required info
+        dfc = df.copy()
 
-        if m == 1:
-            frames.append(df)
-            result = pd.concat(frames)
-            dfc = result.copy()
-            frames = [dfc]
-            
-        if m == 0:
-            dfc = df.copy()
-            frames = [dfc]
-            m = 1
-    '''
-except:
-    fi = str(z)
-    data = Dataset("{}.nc".format(fi) , 'r')
-    
-    # Storing the netCDF data into variables
-
-    u = data.variables['u_{}m_{}'.format(y, x)]
-    v = data.variables['v_{}m_{}'.format(y, x)]
-    w = data.variables['w_{}m_{}'.format(y, x)]
-
-    uu = data.variables['u_u__{}m_{}'.format(y, x)]
-    uv = data.variables['u_v__{}m_{}'.format(y, x)]
-    uw = data.variables['u_w__{}m_{}'.format(y, x)]
-    vv = data.variables['v_v__{}m_{}'.format(y, x)]
-    vw = data.variables['v_w__{}m_{}'.format(y, x)]
-    ww = data.variables['w_w__{}m_{}'.format(y, x)]
-
-    direc = data.variables['dir_{}m_{}'.format(y, x)]
-    spd = data.variables['spd_{}m_{}'.format(y, x)]
-    ldiag = data.variables['ldiag_{}m_{}'.format(y, x)]
-
-    basetime = data.variables['base_time']
-    reltime = data.variables['time']
-
-
-    # Creating an empty pandas dataframe
-    starting_time = data.variables['time'].units[14:29]+ '2:30'
-    ending_time = data.variables['time'].units[14:25]+ '23:57:30'
-    time_range = pd.date_range(start= starting_time, end= ending_time, periods= 288)
-
-    df = pd.DataFrame(0, columns= ['basetime', 'time', 'u','v', 'w', 'vh', 'dir','uu', 'vv', 'ww', 'uv', 'uw', 'vw'], index = time_range)
-
-    # Create a numpy array with the size of the time variable
-
-    dt = np.arange(0, data.variables['time'].size)
-
-    # Filling the empty pandas data frame with the values of the variables for each time value
-
-    for time_index in dt:
-        df.iloc[time_index] = basetime[time_index], reltime[time_index], u[time_index], v[time_index], w[time_index], spd[time_index], direc[time_index], uu[time_index], vv[time_index], ww[time_index], uv[time_index], uw[time_index], vw[time_index]
-
-    dfc = df.copy()
-
-finally:
-    print("File exported")
-    
+    finally:
+        print("File exported")
         
-'''----- PART 6 ----------'''
-'''
-      
-# Saving the Data frame into a CSV and a Excel file
+            
+    '''----- PART 6 ----------'''
 
-dfc.to_csv('file1.csv')
-
-dfc.to_excel('file1.xls')
-
-# When converting the df to a np array the file is loosing the info on the time variable (used as index in the df)
-# Possible solution is create a new df whith  the time series as a column, as well as index
+          
+    # Saving the Data frame into a CSV and a Excel file
 
 
-df_np = dfc.to_numpy()
-np.savetxt("file1.txt", df_np, fmt = "%.4f")
+    if z1 == z2:
+        dfc.to_csv('{}m_{}_{}.csv'.format(y,x,z1))
+
+        dfc.to_excel('{}m_{}_{}.xls'.format(y,x,z1))
+
+        df_np = dfc.to_numpy()
+        np.savetxt("{}m_{}_{}.txt".format(y,x,z1), df_np, fmt = "%.4f")
+
+    else:
+        dfc.to_csv('{}m_{}_{}_{}.csv'.format(y,x,z1,z2))
+
+        dfc.to_excel('{}m_{}_{}_{}.xls'.format(y,x,z1,z2))
+
+        df_np = dfc.to_numpy()
+        np.savetxt("{}m_{}_{}_{}.txt".format(y,x,z1,z2), df_np, fmt = "%.4f")
+
+
+        
+    # When converting the df to a np array the file is loosing the info on the time variable (used as index in the df)
+    # Possible solution is create a new df whith  the time series as a column, as well as index
     
+    while g2 != 1:
+        g_ans = input("End of data gathering?\n[yes/no]:")
+        
+        if g_ans == 'no':
+            g2 = 1
+            continue
+        if g_ans == 'yes':
+            g2 = 1
+            g1 = 1
+            continue
+        else:
+            print("Type correct answer.\n[yes/no]:")
+            continue
+    continue
+
+
+
+
+
+
+
+'''
+Variables
+
+s = string for helping build dates array
+i = iterable for helping build dates array
+j = iterable for helping build dates array
+z1 = starting date from input
+z2 = ending date from input
+x = tower name code from input
+y = sonic height code from input
+a,...,a7 = iterables
+m,n = iterables
+
+
+
 '''
