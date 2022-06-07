@@ -14,6 +14,7 @@ import numpy as np
 import pandas as pd
 import Tower_location as tl
 import requests
+import Dates_array as da
 
 ''' 18 May
 Updates log
@@ -31,99 +32,37 @@ Changed the saving and exporting code to get the files name with the following f
 The app can now extract and export multiple sonics
 '''
 
+'''
+25 may
+Create separete modules for some routines:
+    Dates
+    
+
+'''
 
 
-'''----- PARTE 1 ----------'''
+'''----- PART 1 ----------'''
 
 # The array 'dates' will contain all the dates of the days with available data
 
-dates = np.array([20161129, 20161201, 20161202, 20161205], dtype='i4')
 
+# Fetching the dates arrays from the Dates_array module
 
-i = 7
-
-
-while i<10:
-    s = '2016120'+ str(i)
-    temp = np.array(s, dtype='i4')
-    dates = np.append(dates, [temp])
-    i = i+1
-
-dates = np.append(dates, [20161210])
-
-# Array with the dates of the days with available data for the months of November and Dezember of 2016
-
-dates_16 = dates
-
-# Filling the 'dates' array with the remaining dates of the year 2017
-
-j = 1
-i = 16
-
-# Array with the dates of the days with available data for the months from January until July of 2017
-
-# 1- January, 3- March, 5- May months with 31 days
-# 2- February - 29 days
-# 4- April, 6- June
-
-while j<7:
-    if j == 1 or j == 3 or j == 5:
-        while i < 10:
-            s = '20170' + str(j)+'0'+ str(i)
-            temp = np.array(s, dtype='i4')
-            dates = np.append(dates, [temp])
-            i = i+1
-        else:
-            while i <32:
-                s = '20170' + str(j)+ str(i)
-                temp = np.array(s, dtype='i4')
-                dates = np.append(dates, [temp])
-                i = i+1
-            else:
-                i=1
-        
-    if j == 2:
-        while i <10:
-            s = '20170' + str(j)+ '0' + str(i)
-            temp = np.array(s, dtype='i4')
-            dates = np.append(dates, [temp])
-            i = i+1
-        else:
-            while i <29:
-                s = '20170' + str(j)+ str(i)
-                temp = np.array(s, dtype='i4')
-                dates = np.append(dates, [temp])
-                i = i+1
-            else:
-                i = 1
-    if j == 4 or j == 6:
-        while i <10:
-            s = '20170' + str(j)+ '0' + str(i)
-            temp = np.array(s, dtype='i4')
-            dates = np.append(dates, [temp])
-            i = i+1
-        else:
-            while i < 31:
-                s = '20170' + str(j)+ str(i)
-                temp = np.array(s, dtype='i4')
-                dates = np.append(dates, [temp])
-                i = i+1
-            else:
-                i = 1
-    j = j+1
-
-else:
-    dates = np.append(dates, [20170701])
-
-
-dates_tot = dates
-
+dates_16 = da.d16
+dates_tot = da.d
 
 '''----- PART 2 ----------'''
+# - Ask for the period time of the sample, multiples of 5 min: 5, 10, 15, 20, 30min or 1h
+
+period_val = input("Type one of the options for time period in min:\n5, 10, 15, 20, 30 or 60:")
+
+period_conv = int(period_val)/5
+
+
+
+'''----- PART 3 ----------'''
 
 # define an array that contains the dates defined by the user
-
-
 
 # Ask for input of time period
 
@@ -184,7 +123,8 @@ for q in dates_tot:
 # Write an input extra function to add dates that are not sequential and to order them in dates_def array
 
 
-'''----- PART 3 ----------'''
+'''----- PART 4 ----------'''
+
 
 '''
 # - Download the files defined by the user
@@ -200,7 +140,7 @@ for date in dates_def:
 
 '''    
  
-'''----- PART 4 ----------'''
+'''----- PART 5 ----------'''
    
 # Create input section on wich heights or masts will be extracted
 # this part needs improvement for multiple masts/heights
@@ -208,12 +148,10 @@ for date in dates_def:
 
 # Array with tower name code
 
-t_name = np.array(["tnw01", "tnw02", "tnw03", "tnw04", "tnw05", "tnw06", "tnw07", "tnw08", "tnw09", "tnw10", "tnw11", "tnw12", "tnw13", "tnw14", "tnw15", "tnw16", "tse01", "tse02", "tse04", "tse05", "tse06", "tse07", "tse08", "tse09", "tse10", "tse11", "tse12", "tse13", "rsw01", "rsw02", "rsw03", "rsw04", "rsw05", "rsw06", "rsw07", "rsw08", "rne01", "rne02", "rne03", "rne04", "rne06", "rne07", "v01", "v03", "v04", "v05", "v06", "v07", "Extreme_SW", "Extreme_NE"])
-
+t_name = tl.t_n
 # Array with tower heights
 
-height = np.array(["2", "4", "6", "8", "10", "20", "30", "40", "60", "80", "100"])
-
+height = tl.h
 
 # Ask for input of tower code name, the code will not continue until a valid code name is given
 
@@ -242,7 +180,7 @@ while g1 != 1:
 
 
     i = 0
-    while i < 12:
+    while i < 11:
         if tl.m[i,j] == 1:
             print(height[i])
         
@@ -283,7 +221,7 @@ while g1 != 1:
     # At this point we have the dates defined by the user, the tower and the height relative to one sonic
 
 
-    '''----- PART 5 ----------'''
+    '''----- PART 6 ----------'''
 
     print("Gathering data and exporting")
 
@@ -308,7 +246,7 @@ while g1 != 1:
 
     try:
         for z in dates_def:
-            fi = str(z1)
+            fi = str(z)
             data = Dataset("{}.nc".format(fi) , 'r')
             
             # Storing the netCDF data into variables
@@ -338,16 +276,36 @@ while g1 != 1:
             time_range = pd.date_range(start= starting_time, end= ending_time, periods= 288)
 
             df = pd.DataFrame(0, columns= ['basetime', 'time', 'u','v', 'w', 'vh', 'dir','uu', 'vv', 'ww', 'uv', 'uw', 'vw'], index = time_range)
+            df1 = pd.DataFrame(0, columns= ['basetime', 'time', 'u','v', 'w', 'vh', 'dir','uu', 'vv', 'ww', 'uv', 'uw', 'vw'], index = time_range)
+            df2 = pd.DataFrame(0, columns= ['basetime', 'time', 'u','v', 'w', 'vh', 'dir','uu', 'vv', 'ww', 'uv', 'uw', 'vw'], index = time_range)
+            dfmean = pd.DataFrame(0, columns= ['basetime', 'time', 'u','v', 'w', 'vh', 'dir','uu', 'vv', 'ww', 'uv', 'uw', 'vw'], index = time_range)
+
+
+
 
             # Create a numpy array with the size of the time variable
 
             dt = np.arange(0, data.variables['time'].size)
 
             # Filling the empty pandas data frame with the values of the variables for each time value
-
+            
             for time_index in dt:
                 df.iloc[time_index] = basetime[time_index], reltime[time_index] + 86400*n, u[time_index], v[time_index], w[time_index], spd[time_index], direc[time_index], uu[time_index], vv[time_index], ww[time_index], uv[time_index], uw[time_index], vw[time_index]
-                
+            '''
+            if period_conv == 2:
+                p = 1
+                for time_index in dt:
+                    df.iloc[time_index] = basetime[time_index], reltime[time_index] + 86400*n, u[time_index], v[time_index], w[time_index], spd[time_index], direc[time_index], uu[time_index], vv[time_index], ww[time_index], uv[time_index], uw[time_index], vw[time_index]
+                    if p//2 == 0:
+                        df1.iloc[time_index] = basetime[time_index], reltime[time_index] + 86400*n, u[time_index], v[time_index], w[time_index], spd[time_index], direc[time_index], uu[time_index], vv[time_index], ww[time_index], uv[time_index], uw[time_index], vw[time_index]
+                        p += 1
+                    if p//2 == 1:
+                        df2.iloc[time_index] = basetime[time_index], reltime[time_index] + 86400*n, u[time_index], v[time_index], w[time_index], spd[time_index], direc[time_index], uu[time_index], vv[time_index], ww[time_index], uv[time_index], uw[time_index], vw[time_index]
+                        p = 1
+                        dfmean.iloc[time_index] = df1[time_index,0], (df1[time_index,1] + df1[time_index,1])/2 + 86400*n#, u[time_index], v[time_index], w[time_index], spd[time_index], direc[time_index], uu[time_index], vv[time_index], ww[time_index], uv[time_index], uw[time_index], vw[time_index]
+            '''        
+
+        
             n = n + 1
 
         
@@ -411,7 +369,7 @@ while g1 != 1:
         print("File exported")
         
             
-    '''----- PART 6 ----------'''
+    '''----- PART 7 ----------'''
 
           
     # Saving the Data frame into a CSV and a Excel file
