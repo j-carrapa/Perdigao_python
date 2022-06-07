@@ -147,7 +147,7 @@ height = np.array(["2", "4", "6", "8", "10", "20", "30", "40", "60", "80", "100"
 
 # This 2D array is initiallized with zeros "0"
 
-m = np.zeros((12,50))
+m = np.zeros((11,50))
 
 
 # This 'for loop' will check in each tower, if there are wind speed values for the different heights. If true, it will change the 'm' array from '0' to '1' in the correspondent position for the height in each tower
@@ -181,4 +181,57 @@ for a in t_name:
 # The 'print' on the exceptions where hidden in order not to fill the 'Out' whith messages
 
 
+# Array with tower name code
 
+t_n = t_name
+
+# Array with tower heights
+
+h = height
+
+
+# function retrieves a boolean array containing sonics height for a specific tower
+# input argument is a variable containing a string with tower code name, ex: 'tnw01'
+
+def sonics_height (t):
+    j = np.where(t_name == t)
+    j = j[0]
+    i = 0
+    global result_bool_t
+    result_bool_t = np.array(m[i,j], dtype='i4')
+    i = 1
+    while i < 11:
+        result_bool_t = np.append(result_bool_t, m[i,j])
+        i += 1
+        continue
+    return result_bool_t
+    
+'''
+#checking if the function is working - apparently it is
+f = 'tnw01'
+        
+sonics_height(f)
+print(result_bool)
+'''
+# function retrieves a boolean array that says if there is a tower that has a sonic for the specified heigt
+# input argument is a variable containing a string with sonic height, ex: '10'
+
+def tower_available (d):
+    i = np.where(height == d)
+    i = i[0]
+    j = 0
+    global result_bool_h
+    result_bool_h = np.array(m[i,j], dtype='i4')
+    j = 1
+    while j < 50:
+        result_bool_h = np.append(result_bool_h, m[i,j])
+        j += 1
+        continue
+    return result_bool_h
+
+'''
+#checking if the function is working - apparently it is
+v = '10'
+tower_available(v)
+print(result_bool_h)
+'''
