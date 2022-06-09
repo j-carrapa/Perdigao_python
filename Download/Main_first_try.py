@@ -22,6 +22,9 @@ while g1 != 1:
     if f_ans == 2:
         import Mode_02_all_sonics_one_mast
         
+    if f_ans == 3:
+        import Mode_03_all_sonics_multiple_masts
+        
     
         
     
