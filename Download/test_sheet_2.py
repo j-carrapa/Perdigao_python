@@ -26,69 +26,59 @@ t_name = tl.t_n
 
 # Ask for input of tower code name, the code will not continue until a valid code name is given
 
-
-    
 a1 = 0
 a2 = 0
 a3 = 0
-a4 = 0
+
+print("Type 1 tower name code and press enter.\nYou will be asked for a new tower code name until you type[end]")
 
 while a3 != 1:
-    while a1 != 1:
-        j = 0
-        x = input("Tower name code:")
-        for a in t_name:
-            
-            if x == a:
-                
-                if a2 == 1:
-                    x_arr = np.append(x_arr, x)
-                    j_arr = np.append(j_arr, j)
-                    
-                if a2 == 0:
-                    x_arr = np.array(x)
-                    j_arr = np.array(j)
-                    a2 = 1
-                
-                a4 = 0   
-                a1 = 1
-                break
-            j = j + 1
-        if a1 != 1:
-            print("Code name incorrect")
-            
-        continue
-    
-    while a4 != 1:
+    j = 0
+    x = input("Tower name code:")
+    for a in t_name:
         
-        t_ans = input("Get other tower?\n[yes/no]:")
-        
-        if t_ans == 'yes':
-            a4 = 1
-            a1 = 0
-            break
-            
-        if t_ans == 'no':
-            a4 = 1
+        if x == 'end':
             a3 = 1
+            
             break
         
-        if a4 == 0:
-            print("Type correct answer")
+        if x == a:
             
+            if a2 == 1:
+                x_arr = np.append(x_arr, x)
+                j_arr = np.append(j_arr, j)
+                
+            if a2 == 0:
+                x_arr = np.array(x)
+                j_arr = np.array(j)
+                x0 = x
+                j0 = j
+                a2 = 1
+              
+            a1 = 1
+            break
+        j = j + 1
+    if a1 != 1:
+        print("Code name incorrect")
         
     continue
-    
 
-for x in x_arr:
-    
+if x_arr.size > 1:
     i = 0
-    print(x)
-    print(j_arr[i])
+    for x in x_arr:
+        
+        
+        print(x)
+        #print(j_arr[i])
+        
+        j = j_arr.item(i)
+        print(j)
+        i += 1
+else:
+    x = x0
+    j = j0
+
     
-    #j = j_arr[i]
-    #print(j)
-    i += 1
     
 
 
