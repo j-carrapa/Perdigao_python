@@ -180,124 +180,109 @@ height = tl.h
 
 # Ask for input of tower code name, the code will not continue until a valid code name is given
 
-g1 = 0
-
-while g1 != 1:
     
-    g2 = 0
-    
-    a1 = 0
+a1 = 0
 
-    while a1 != 1:
-        j = 0
-        x = input("Tower name code:")
-        for a in t_name:
-            if x == a:
-                a1 = 1
-                break
-            j = j + 1
-        if a1 != 1:
-            print("Code name incorrect")
-            
-        continue   
-              
-    # Display which sonics heights are available for that tower
-
-
-    i = 0
-    while i < 11:
-        if tl.m[i,j] == 1:
-            print(height[i])
+while a1 != 1:
+    j = 0
+    x = input("Tower name code:")
+    for a in t_name:
+        if x == a:
+            a1 = 1
+            break
+        j = j + 1
+    if a1 != 1:
+        print("Code name incorrect")
         
-        i = i + 1
-        continue
+    continue   
+          
+# Display which sonics heights are available for that tower
 
 
-    #  Ask for input of sonic height, the code will not continue until a valid height for the choosen tower is given
+i = 0
+while i < 11:
+    if tl.m[i,j] == 1:
+        print(height[i])
+    
+    i = i + 1
+    continue
 
 
-    a3 = 0
-    while a3 != 1:
-        a2 = 0
-        while a2 != 1:
-            i = 0
-            y = input("Tower height:")
-            for b in height:
-                if y == b:
-                    a2 = 1
-                    break
-                i = i + 1
+#  Ask for input of sonic height, the code will not continue until a valid height for the choosen tower is given
+
+
+a3 = 0
+while a3 != 1:
+    a2 = 0
+    while a2 != 1:
+        i = 0
+        y = input("Tower height:")
+        for b in height:
+            if y == b:
+                a2 = 1
+                break
+            i = i + 1
+        
+        if a2 != 1:
+            print("Select an appropriate height")
             
-            if a2 != 1:
-                print("Select an appropriate height")
-                
-            continue 
-        if tl.m[i,j] == 1:
-            a3 = 1
-        else:
-            print("This tower doesn't have sonics for {} heihgt, select an appropriate height".format(y))
-        continue
+        continue 
+    if tl.m[i,j] == 1:
+        a3 = 1
+    else:
+        print("This tower doesn't have sonics for {} heihgt, select an appropriate height".format(y))
+    continue
 
 
-    # x: tower code name
-    # y: height code name
+# x: tower code name
+# y: height code name
 
 
-    # At this point we have the dates defined by the user, the tower and the height relative to one sonic
-    
-    '''----- PART 7 ----------'''
+# At this point we have the dates defined by the user, the tower and the height relative to one sonic
 
-    print("Gathering data and exporting")
+'''----- PART 7 ----------'''
 
-    # Just to explain user what is happening
+print("Gathering data and exporting")
 
-    #  Call the extraction module and concatenate the data in order, using time as index
+# Just to explain user what is happening
 
-    # don't know how to call it from a module, will put everything in this file
+#  Call the extraction module and concatenate the data in order, using time as index
 
-    # Reading the netcd file
-    #fi, x and y will be given by the main input
-    
-    #try with data_gathering function
-    
-    
-    dg.data_gathering(dates_def, z1, z2, x, y)
-    
-    dfc = dg.dfc3.copy()
-    
+# don't know how to call it from a module, will put everything in this file
 
-    '''----- PART 8 ----------'''
-    # If time period is different from 5 min, retrieves a data frame with the mean variables values, according to the time period selected
+# Reading the netcd file
+#fi, x and y will be given by the main input
 
-    if k>1:
-        tp.period_adjust(z1, z2, dfc, k)
-        dfc = tp.dfm.copy()        
-    
-    '''----- PART 9 ----------'''
-    # If the user asked for a specific time period of the day (ex: from 11h to 17h) this function updates the df to fulfill that order.
-    
+#try with data_gathering function
+
+
+dg.data_gathering(dates_def, z1, z2, x, y)
+
+dfc = dg.dfc3.copy()
+
+
+'''----- PART 8 ----------'''
+# If time period is different from 5 min, retrieves a data frame with the mean variables values, according to the time period selected
+
+if k>1:
+    tp.period_adjust(z1, z2, dfc, k)
+    dfc = tp.dfm.copy()        
+
+'''----- PART 9 ----------'''
+# If the user asked for a specific time period of the day (ex: from 11h to 17h) this function updates the df to fulfill that order.
+
+if z3 != 0 or z4 != 24:
     tp.section_time(dfc, z1, z2, z3, z4, k, dates_def)
     dfc = tp.dfnew.copy()
 
-    '''----- PART 10 ----------'''
-    
-    se.save_export(dfc, x, y, z1, z2, z3, z4, k)
 
-    # When converting the df to a np array the file is loosing the info on the time variable (used as index in the df)
-    # Possible solution is create a new df whith  the time series as a column, as well as index
-    
-    while g2 != 1:
-        g_ans = input("End of data gathering?\n[yes/no]:")
-        
-        if g_ans == 'no':
-            g2 = 1
-            continue
-        if g_ans == 'yes':
-            g2 = 1
-            g1 = 1
-            continue
-        else:
-            print("Type correct answer.\n[yes/no]:")
-            continue
-    continue
+
+'''----- PART 10 ----------'''
+
+se.save_export(dfc, x, y, z1, z2, z3, z4, k)
+
+# When converting the df to a np array the file is loosing the info on the time variable (used as index in the df)
+# Possible solution is create a new df whith  the time series as a column, as well as index
+
+
 
