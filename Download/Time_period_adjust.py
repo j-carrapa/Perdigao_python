@@ -168,21 +168,19 @@ def section_time (dfc, z1, z2, z3, z4, k, dates_def):
     n0 = 0
     
     dt = np.arange(0, le)
-
-    for a in dates_def:
-        
-        ex.extract_start_time(a, k, z3)
+    
+    if z1 == z2:
+        ex.extract_start_time(z1, k, z3)
         starting_time = ex.start
 
-        ex.extract_end_time(a, k, z4)
+        ex.extract_end_time(z1, k, z4)
         ending_time = ex.end
 
         time_range = pd.date_range(start= starting_time, end= ending_time, periods= le)
         dfn = pd.DataFrame(0, columns= ['basetime', 'time', 'u','v', 'w', 'vh', 'dir','uu', 'vv', 'ww', 'uv', 'uw', 'vw'], index = time_range)
-
         
         for i in dt:
-            j = i + (12*z3)/k + (288/k)*n0
+            j = i + (12*z3)/k
             j = int(j)
             i = int(i)
 
@@ -203,15 +201,54 @@ def section_time (dfc, z1, z2, z3, z4, k, dates_def):
             
             
             dfn.iloc[i] = b, t, u, v, w, vh, di, uu, vv, ww, uv, uw, vw
-        
-        
-        if n0 == 0:
+            
             df = dfn.copy()
-        else:
-            co.concatenate(df, dfn)
-            df = co.dfc1.copy()
         
-        n0 += 1
+    else:
+        for a in dates_def:
+            
+            ex.extract_start_time(a, k, z3)
+            starting_time = ex.start
+
+            ex.extract_end_time(a, k, z4)
+            ending_time = ex.end
+
+            time_range = pd.date_range(start= starting_time, end= ending_time, periods= le)
+            dfn = pd.DataFrame(0, columns= ['basetime', 'time', 'u','v', 'w', 'vh', 'dir','uu', 'vv', 'ww', 'uv', 'uw', 'vw'], index = time_range)
+
+            
+            for i in dt:
+                j = i + (12*z3)/k + (288/k)*n0
+                j = int(j)
+                i = int(i)
+
+                
+                b = dfc.iat[j,0]
+                t = dfc.iat[j,1]
+                u = dfc.iat[j, 2]
+                v = dfc.iat[j, 3]
+                w = dfc.iat[j, 4]
+                vh = dfc.iat[j, 4]
+                di = dfc.iat[j, 6]
+                uu = dfc.iat[j, 7]
+                vv = dfc.iat[j, 8]
+                ww = dfc.iat[j, 9]
+                uv = dfc.iat[j, 10]
+                uw = dfc.iat[j, 11]
+                vw = dfc.iat[j, 12]
+                
+                
+                dfn.iloc[i] = b, t, u, v, w, vh, di, uu, vv, ww, uv, uw, vw
+            
+            
+            if n0 == 0:
+                df = dfn.copy()
+            else:
+                co.concatenate(df, dfn)
+                df = co.dfc1.copy()
+            
+            n0 += 1
+            
         
     
     global dfnew
