@@ -196,30 +196,15 @@ while a1 != 1:
 # Create an array with the sonics heights available for that tower
 
 
-he = np.empty([11], dtype=int)
-
-v = 0
-i = 0
-while i < 11:
-    if tl.m[i,j] == 1:
-    
-        he[v] = height[i]
-        v += 1
-    
-    i = i + 1
-    continue
-
-hei = he[0:v]
-
-
-
+tl.sonics_available_name(j)
+hei = tl.hei.copy()
 
 
 # x: tower code name
 # hei: array with height code name
 
-
 # At this point we have the dates defined by the user, the tower and the height relative to every available sonic in that tower
+
 
 '''----- PART 7 ----------'''
 
@@ -229,13 +214,7 @@ print("Gathering data and exporting")
 
 #  Call the extraction module and concatenate the data in order, using time as index
 
-# don't know how to call it from a module, will put everything in this file
-
-# Reading the netcd file
-#fi, x and y will be given by the main input
-
-#try with data_gathering function
-
+# Loop through all the sonics and call the extraction module and concatenate the data in order, using time as index, in each one of them
 for y in hei:
     
     
