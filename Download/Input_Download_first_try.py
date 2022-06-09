@@ -15,6 +15,8 @@ import pandas as pd
 import Tower_location as tl
 import requests
 import Dates_array as da
+import Data_gathering as dg
+
 
 ''' 18 May
 Updates log
@@ -233,7 +235,15 @@ while g1 != 1:
 
     # Reading the netcd file
     #fi, x and y will be given by the main input
-
+    
+    #try with data_gathering function
+    
+    '''
+    dg.data_gathering(dates_def, z1, z2, x, y)
+    
+    dfc = dg.dfc3.copy()
+    
+    '''
     m = 0
     n = 0
     fi = str(z1)
@@ -291,7 +301,7 @@ while g1 != 1:
             
             for time_index in dt:
                 df.iloc[time_index] = basetime[time_index], reltime[time_index] + 86400*n, u[time_index], v[time_index], w[time_index], spd[time_index], direc[time_index], uu[time_index], vv[time_index], ww[time_index], uv[time_index], uw[time_index], vw[time_index]
-            '''
+            
             if period_conv == 2:
                 p = 1
                 for time_index in dt:
@@ -303,7 +313,7 @@ while g1 != 1:
                         df2.iloc[time_index] = basetime[time_index], reltime[time_index] + 86400*n, u[time_index], v[time_index], w[time_index], spd[time_index], direc[time_index], uu[time_index], vv[time_index], ww[time_index], uv[time_index], uw[time_index], vw[time_index]
                         p = 1
                         dfmean.iloc[time_index] = df1[time_index,0], (df1[time_index,1] + df1[time_index,1])/2 + 86400*n#, u[time_index], v[time_index], w[time_index], spd[time_index], direc[time_index], uu[time_index], vv[time_index], ww[time_index], uv[time_index], uw[time_index], vw[time_index]
-            '''        
+                    
 
         
             n = n + 1
@@ -368,7 +378,7 @@ while g1 != 1:
     finally:
         print("File exported")
         
-            
+                    
     '''----- PART 7 ----------'''
 
           
