@@ -7,6 +7,17 @@ Created on Fri May 20 16:15:06 2022
 
 # Main first try
 f_ans = input("Choose one option:\n[1] Manual sonic selection\n[2] All sonics in one mast\n[3]All sonics in choosen masts\n[4] All sonics for specified height\n[5] Sonics for specified height, in choosen masts\nPlease choose the number of the desired mode:")
+f_ans = int(f_ans)
+
+if f_ans == 1:
+    import Mode_01_one_sonic_one_mast
+
+
+
+
+
+
+
 
 
 
