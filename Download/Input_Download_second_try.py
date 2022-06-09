@@ -272,8 +272,9 @@ while g1 != 1:
     '''----- PART 9 ----------'''
     # If the user asked for a specific time period of the day (ex: from 11h to 17h) this function updates the df to fulfill that order.
     
-    tp.section_time(dfc, z1, z2, z3, z4, k, dates_def)
-    dfc = tp.dfnew.copy()
+    if z3 != 0 or z4 != 24:
+        tp.section_time(dfc, z1, z2, z3, z4, k, dates_def)
+        dfc = tp.dfnew.copy()
 
     '''----- PART 10 ----------'''
     
