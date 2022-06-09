@@ -235,3 +235,44 @@ v = '10'
 tower_available(v)
 print(result_bool_h)
 '''
+
+def sonics_available_name (j):
+    
+    he = np.empty([11], dtype=int)
+
+    v = 0
+    i = 0
+    while i < 11:
+        if m[i,j] == 1:
+        
+            he[v] = height[i]
+            v += 1
+        
+        i = i + 1
+        continue
+    
+    global hei
+
+    hei = he[0:v]
+    return hei
+
+#This code is the original that was made into sonics_avaliable_name function
+'''
+he = np.empty([11], dtype=int)
+
+v = 0
+i = 0
+while i < 11:
+    if tl.m[i,j] == 1:
+    
+        he[v] = height[i]
+        v += 1
+    
+    i = i + 1
+    continue
+
+hei = he[0:v]
+'''
+    
+    
+    
