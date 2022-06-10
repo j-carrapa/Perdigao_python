@@ -25,7 +25,11 @@ while g1 != 1:
     if f_ans == 3:
         import Mode_03_all_sonics_multiple_masts
         
-    
+    if f_ans == 4:
+        import Mode_04_all_masts_multiple_sonics
+        
+    if f_ans == 5:
+        import Mode_05_multiple_masts_multiple_sonics
         
     
     while g2 != 1:
