@@ -178,16 +178,17 @@ a1 = 0
 a2 = 0
 a3 = 0
 
-print("Type 1 tower name code and press enter.\nYou will be asked for a new tower code name until you type[end]")
+print("Type 1 tower code name and press enter.\nYou will be asked for a new tower code name until you type[end]")
 
 while a3 != 1:
+    a1 = 0
     j = 0
     x = input("Tower name code:")
     for a in t_name:
         
         if x == 'end':
             a3 = 1
-            
+            a1 = 1
             break
         
         if x == a:
@@ -267,6 +268,11 @@ if x_arr.size > 1:
 else:
     x = x0
     j = j0
+    
+    # Create an array with the sonics heights available for that tower
+
+    tl.sonics_available_name(j)
+    hei = tl.hei.copy()
     
     # Loop through all the sonics and call the extraction module and concatenate the data in order, using time as index, in each one of them
     for y in hei:
