@@ -273,6 +273,42 @@ while i < 11:
 
 hei = he[0:v]
 '''
+
+def tower_avaliable_name (i):
     
+    to = t_name.copy()
+
+    t = 0
+    j = 0
+    while j < 50:
+        if m[i,j] == 1:
+        
+            to[t] = t_name[j]
+            t += 1
+        
+        j = j + 1
+        continue
     
+    global tow
+    tow = to[0:t]
+    return tow
+
+
+#This code is the original that was made into tower_avaliable_name function
+'''
+to = t_name.copy()
+
+t = 0
+j = 0
+while j < 50:
+    if tl.m[i,j] == 1:
+    
+        to[t] = t_name[j]
+        t += 1
+    
+    j = j + 1
+    continue
+
+tow = to[0:t]
+#'''    
     
