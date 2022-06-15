@@ -22,6 +22,9 @@ import Data_gathering as dg
 import Download as dl
 import save_export_function as se
 import Time_period_adjust as tp
+import Turbulence_parameters as tu
+import Process_routines_compiled as pr
+
 
 '''----- PART 1 ----------'''
 
@@ -240,49 +243,12 @@ while a3 != 1:
 
 # At this point we have the dates defined by the user, the tower and the height relative to one sonic
 
-'''----- PART 7 ----------'''
+'''----- PARTS 7-11 ----------'''
 
 print("Gathering data and exporting")
 
 # Just to explain user what is happening
 
-#  Call the extraction module and concatenate the data in order, using time as index
+# this function compiles every process of data gathering, calculate turbulence parameters, adjust the time of the samples, adjust the time period through the day and saving and exporting the data for 1 sonic in the designated time period.
 
-# don't know how to call it from a module, will put everything in this file
-
-# Reading the netcd file
-#fi, x and y will be given by the main input
-
-#try with data_gathering function
-
-
-dg.data_gathering(dates_def, z1, z2, x, y)
-
-dfc = dg.dfc3.copy()
-
-
-'''----- PART 8 ----------'''
-# If time period is different from 5 min, retrieves a data frame with the mean variables values, according to the time period selected
-
-if k>1:
-    tp.period_adjust(z1, z2, dfc, k)
-    dfc = tp.dfm.copy()        
-
-'''----- PART 9 ----------'''
-# If the user asked for a specific time period of the day (ex: from 11h to 17h) this function updates the df to fulfill that order.
-
-if z3 != 0 or z4 != 24:
-    tp.section_time(dfc, z1, z2, z3, z4, k, dates_def)
-    dfc = tp.dfnew.copy()
-
-
-
-'''----- PART 10 ----------'''
-
-se.save_export(dfc, x, y, z1, z2, z3, z4, k)
-
-# When converting the df to a np array the file is loosing the info on the time variable (used as index in the df)
-# Possible solution is create a new df whith  the time series as a column, as well as index
-
-
-
+pr.process_routines(dates_def, z1, z2, z3, z4, x, y, k)
