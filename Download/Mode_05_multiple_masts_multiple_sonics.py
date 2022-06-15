@@ -17,6 +17,7 @@ import Data_gathering as dg
 import Download as dl
 import save_export_function as se
 import Time_period_adjust as tp
+import Process_routines_compiled as pr
 
 '''----- PART 1 ----------'''
 
@@ -258,11 +259,12 @@ while a3 != 1:
 # At this point we have the dates defined by the user, the towers and the sonics heights
 
 
-'''----- PART 7 ----------'''
+'''----- PARTS 7-11 ----------'''
 
 print("Gathering data and exporting")
 
 # Just to explain user what is happening
+
 #Loop through towers (if there was a incorrect use of the mode and only one tower was selected, it will work nevertheless) 
 
 if x_arr.size > 1:
@@ -278,7 +280,7 @@ if x_arr.size > 1:
         
         i += 1
         
-        # Loop through all the sonics and call the extraction module and concatenate the data in order, using time as index, in each one of them
+        # Loop through all the sonics and call the process_routines function to process and export the data in each one of them
         for y in hei:
             
             if y_arr.size > 1:
@@ -289,33 +291,9 @@ if x_arr.size > 1:
                     
                     if y1 == y:
                         
-                        dg.data_gathering(dates_def, z1, z2, x, y)
-                        
-                        dfc = dg.dfc3.copy()
-                        
+                        # this function compiles every process of data gathering, calculate turbulence parameters, adjust the time of the samples, adjust the time period through the day and saving and exporting the data for 1 sonic in the designated time period.
 
-                        '''----- PART 8 ----------'''
-                        # If time period is different from 5 min, retrieves a data frame with the mean variables values, according to the time period selected
-
-                        if k>1:
-                            tp.period_adjust(z1, z2, dfc, k)
-                            dfc = tp.dfm.copy()        
-                        
-                        '''----- PART 9 ----------'''
-                        # If the user asked for a specific time period of the day (ex: from 11h to 17h) this function updates the df to fulfill that order.
-                        
-                        if z3 != 0 or z4 != 24:
-                            tp.section_time(dfc, z1, z2, z3, z4, k, dates_def)
-                            dfc = tp.dfnew.copy()
-                        
-
-                        '''----- PART 10 ----------'''
-                        
-                        se.save_export(dfc, x, y, z1, z2, z3, z4, k)
-
-                        # When converting the df to a np array the file is loosing the info on the time variable (used as index in the df)
-                        # Possible solution is create a new df whith  the time series as a column, as well as index
-           
+                        pr.process_routines(dates_def, z1, z2, z3, z4, x, y, k)
                     
             else:
                 y1 = int(y0)
@@ -323,33 +301,10 @@ if x_arr.size > 1:
                 
                 if y1 == y:
                     
-                    dg.data_gathering(dates_def, z1, z2, x, y)
-                    
-                    dfc = dg.dfc3.copy()
-                    
+                    # this function compiles every process of data gathering, calculate turbulence parameters, adjust the time of the samples, adjust the time period through the day and saving and exporting the data for 1 sonic in the designated time period.
 
-                    '''----- PART 8 ----------'''
-                    # If time period is different from 5 min, retrieves a data frame with the mean variables values, according to the time period selected
+                    pr.process_routines(dates_def, z1, z2, z3, z4, x, y, k)
 
-                    if k>1:
-                        tp.period_adjust(z1, z2, dfc, k)
-                        dfc = tp.dfm.copy()        
-                    
-                    '''----- PART 9 ----------'''
-                    # If the user asked for a specific time period of the day (ex: from 11h to 17h) this function updates the df to fulfill that order.
-                    
-                    if z3 != 0 or z4 != 24:
-                        tp.section_time(dfc, z1, z2, z3, z4, k, dates_def)
-                        dfc = tp.dfnew.copy()
-                    
-
-                    '''----- PART 10 ----------'''
-                    
-                    se.save_export(dfc, x, y, z1, z2, z3, z4, k)
-
-                    # When converting the df to a np array the file is loosing the info on the time variable (used as index in the df)
-                    # Possible solution is create a new df whith  the time series as a column, as well as index
-       
 else:
     x = x0
     j1 = j0
@@ -359,7 +314,7 @@ else:
     tl.sonics_available_name(j1)
     hei = tl.hei.copy()
     
-    # Loop through all the sonics and call the extraction module and concatenate the data in order, using time as index, in each one of them
+    # Loop through all the sonics and call the process_routines function to process and export the data in each one of them
     for y in hei:
         
         
@@ -371,33 +326,9 @@ else:
                 
                 if y1 == y:
                     
-                    dg.data_gathering(dates_def, z1, z2, x, y)
-                    
-                    dfc = dg.dfc3.copy()
-                    
+                    # this function compiles every process of data gathering, calculate turbulence parameters, adjust the time of the samples, adjust the time period through the day and saving and exporting the data for 1 sonic in the designated time period.
 
-                    '''----- PART 8 ----------'''
-                    # If time period is different from 5 min, retrieves a data frame with the mean variables values, according to the time period selected
-
-                    if k>1:
-                        tp.period_adjust(z1, z2, dfc, k)
-                        dfc = tp.dfm.copy()        
-                    
-                    '''----- PART 9 ----------'''
-                    # If the user asked for a specific time period of the day (ex: from 11h to 17h) this function updates the df to fulfill that order.
-                    
-                    if z3 != 0 or z4 != 24:
-                        tp.section_time(dfc, z1, z2, z3, z4, k, dates_def)
-                        dfc = tp.dfnew.copy()
-                    
-
-                    '''----- PART 10 ----------'''
-                    
-                    se.save_export(dfc, x, y, z1, z2, z3, z4, k)
-
-                    # When converting the df to a np array the file is loosing the info on the time variable (used as index in the df)
-                    # Possible solution is create a new df whith  the time series as a column, as well as index
-       
+                    pr.process_routines(dates_def, z1, z2, z3, z4, x, y, k)
                 
         else:
             y1 = int(y0)
@@ -405,32 +336,6 @@ else:
             
             if y1 == y:
                 
-                dg.data_gathering(dates_def, z1, z2, x, y)
-                
-                dfc = dg.dfc3.copy()
-                
+                # this function compiles every process of data gathering, calculate turbulence parameters, adjust the time of the samples, adjust the time period through the day and saving and exporting the data for 1 sonic in the designated time period.
 
-                '''----- PART 8 ----------'''
-                # If time period is different from 5 min, retrieves a data frame with the mean variables values, according to the time period selected
-
-                if k>1:
-                    tp.period_adjust(z1, z2, dfc, k)
-                    dfc = tp.dfm.copy()        
-                
-                '''----- PART 9 ----------'''
-                # If the user asked for a specific time period of the day (ex: from 11h to 17h) this function updates the df to fulfill that order.
-                
-                if z3 != 0 or z4 != 24:
-                    tp.section_time(dfc, z1, z2, z3, z4, k, dates_def)
-                    dfc = tp.dfnew.copy()
-                
-
-                '''----- PART 10 ----------'''
-                
-                se.save_export(dfc, x, y, z1, z2, z3, z4, k)
-
-                # When converting the df to a np array the file is loosing the info on the time variable (used as index in the df)
-                # Possible solution is create a new df whith  the time series as a column, as well as index
-   
-
-
+                pr.process_routines(dates_def, z1, z2, z3, z4, x, y, k)
