@@ -177,7 +177,7 @@ def section_time (dfc, z1, z2, z3, z4, k, dates_def):
         ending_time = ex.end
 
         time_range = pd.date_range(start= starting_time, end= ending_time, periods= le)
-        dfn = pd.DataFrame(0, columns= ['basetime', 'time', 'u','v', 'w', 'vh', 'dir','uu', 'vv', 'ww', 'uv', 'uw', 'vw'], index = time_range)
+        dfn = pd.DataFrame(0, columns= ['basetime', 'time', 'u','v', 'w', 'vh', 'dir','uu', 'vv', 'ww', 'uv', 'uw', 'vw', 'tke', 'ti', 'tih'], index = time_range)
         
         for i in dt:
             j = i + (12*z3)/k
@@ -198,9 +198,11 @@ def section_time (dfc, z1, z2, z3, z4, k, dates_def):
             uv = dfc.iat[j, 10]
             uw = dfc.iat[j, 11]
             vw = dfc.iat[j, 12]
+            tke = dfc.iat[j, 13]
+            ti = dfc.iat[j, 14]
+            tih = dfc.iat[j, 15]            
             
-            
-            dfn.iloc[i] = b, t, u, v, w, vh, di, uu, vv, ww, uv, uw, vw
+            dfn.iloc[i] = b, t, u, v, w, vh, di, uu, vv, ww, uv, uw, vw, tke, ti, tih
             
             df = dfn.copy()
         
@@ -214,7 +216,7 @@ def section_time (dfc, z1, z2, z3, z4, k, dates_def):
             ending_time = ex.end
 
             time_range = pd.date_range(start= starting_time, end= ending_time, periods= le)
-            dfn = pd.DataFrame(0, columns= ['basetime', 'time', 'u','v', 'w', 'vh', 'dir','uu', 'vv', 'ww', 'uv', 'uw', 'vw'], index = time_range)
+            dfn = pd.DataFrame(0, columns= ['basetime', 'time', 'u','v', 'w', 'vh', 'dir','uu', 'vv', 'ww', 'uv', 'uw', 'vw', 'tke', 'ti', 'tih'], index = time_range)
 
             
             for i in dt:
@@ -236,10 +238,11 @@ def section_time (dfc, z1, z2, z3, z4, k, dates_def):
                 uv = dfc.iat[j, 10]
                 uw = dfc.iat[j, 11]
                 vw = dfc.iat[j, 12]
+                tke = dfc.iat[j, 13]
+                ti = dfc.iat[j, 14]
+                tih = dfc.iat[j, 15]            
                 
-                
-                dfn.iloc[i] = b, t, u, v, w, vh, di, uu, vv, ww, uv, uw, vw
-            
+                dfn.iloc[i] = b, t, u, v, w, vh, di, uu, vv, ww, uv, uw, vw, tke, ti, tih
             
             if n0 == 0:
                 df = dfn.copy()
@@ -249,7 +252,7 @@ def section_time (dfc, z1, z2, z3, z4, k, dates_def):
             
             n0 += 1
             
-        
+
     
     global dfnew
     dfnew = df.copy()
