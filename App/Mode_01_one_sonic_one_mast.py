@@ -6,8 +6,7 @@ Created on Mon Jun  6 16:45:48 2022
 """
 
 '''
-This module is used for describing how the app will work if mode 1 is selected
-If there is no way of running modules as scrips, this code will be copied to the main file
+This module extracts, processes and exports data for 1 sonic in the dates defined by the user
 '''
 
 # mode 1 one sonic height 1 mast
@@ -28,8 +27,7 @@ import Process_routines_compiled as pr
 
 '''----- PART 1 ----------'''
 
-# The array 'dates' will contain all the dates of the days with available data
-
+# The array 'dates_tot' will contain all the dates of the days with available data
 
 # Fetching the dates arrays from the Dates_array module
 
@@ -38,8 +36,8 @@ dates_tot = da.d
 
 '''----- PART 2 ----------'''
 
-#'''
 # - Ask for the period time of the sample, multiples of 5 min: 5, 10, 15, 20, 30min or 1h, doesn´t accept other time periods
+
 p0 = 0
 
 while p0 != 1:
@@ -59,15 +57,11 @@ period_conv = int(period_val)/5
 
 k = period_conv
 
-
-#'''
-
-
 '''----- PART 3 ----------'''
 
 # Ask for input of which hours of the day are of interest
 # z3 = start hour
-# z3 = ending hour
+# z4 = ending hour
 
 hour_arr = np.arange(0, 25)
 
@@ -100,7 +94,6 @@ while a8 != 1:
         print("Possible ending hours:")
         print(hour_arr[z3+1:25])
     continue
-
 
 '''----- PART 4 ----------'''
 
@@ -144,9 +137,7 @@ while a5 != 1:
     continue
 
 # using defined sart and end dates (z1, z2) to create an array with the defined dates
-# This for cycle is showing an error (dates_def appears first for append than for creation, the fact is that the if line for the append will not ever be executed before the if line for creation). 
-# Is it necessary to create an empty array first???
-#dates_def = np.array(0, dtype = 'i4')
+# This for cycle is showing an error (dates_def appears first for append than for creation, the fact is that the if line for the append will not ever be executed before the if line for creation)
 
 a6 = 0
 
@@ -162,28 +153,26 @@ for q in dates_tot:
 
 # the array dates_def contains all the dates defined by the user for extracting data, every position of the array contains the date of 1 day with the format YYYYMMDD
 
-# Write an input extra function to add dates that are not sequential and to order them in dates_def array
-
 '''----- PART 5 ----------'''
+
+# Download files matching the dates defined by the user
 
 dl.download(dates_def)
 
 '''----- PART 6 ----------'''
    
-# Create input section on wich heights or masts will be extracted
-# this part needs improvement for multiple masts/heights
-    
+# Create input section on wich mast and height the sonic data will be extracted
 
 # Array with tower name code
 
 t_name = tl.t_n
+
 # Array with tower heights
 
 height = tl.h
 
 # Ask for input of tower code name, the code will not continue until a valid code name is given
 
-    
 a1 = 0
 
 while a1 != 1:
@@ -201,7 +190,6 @@ while a1 != 1:
           
 # Display which sonics heights are available for that tower
 
-
 i = 0
 while i < 11:
     if tl.m[i,j] == 1:
@@ -210,9 +198,7 @@ while i < 11:
     i = i + 1
     continue
 
-
 #  Ask for input of sonic height, the code will not continue until a valid height for the choosen tower is given
-
 
 a3 = 0
 while a3 != 1:
@@ -236,10 +222,8 @@ while a3 != 1:
         print("This tower doesn't have sonics for {} heihgt, select an appropriate height".format(y))
     continue
 
-
 # x: tower code name
 # y: height code name
-
 
 # At this point we have the dates defined by the user, the tower and the height relative to one sonic
 
