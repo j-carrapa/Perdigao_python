@@ -27,8 +27,7 @@ def save_export (dfc, x, y, z1, z2, z3, z4, k):
             dfc.to_excel('{}m_{}_{}_{}-{}h_P-{}min.xls'.format(y,x,z1,z3,z4,p))
 
             df_np = dfc.to_numpy()
-            np.savetxt("{}m_{}_{}_{}-{}h_P-{}min.txt".format(y,x,z1,z3,z4,p), df_np, fmt = "%.4f")
-            
+            np.savetxt("{}m_{}_{}_{}-{}h_P-{}min.txt".format(y,x,z1,z3,z4,p), df_np, fmt = "%.4f")        
         
     else:
         if z3 == 0 and z4 == 24:
@@ -45,3 +44,6 @@ def save_export (dfc, x, y, z1, z2, z3, z4, k):
 
             df_np = dfc.to_numpy()
             np.savetxt("{}m_{}_{}_{}_{}-{}h_P-{}min.txt".format(y,x,z1,z2,z3,z4,p), df_np, fmt = "%.4f")
+
+# When converting the df to a np array the file is loosing the info on the time variable (used as index in the df)
+# Possible solution is create a new df whith  the time series as a column, as well as index
