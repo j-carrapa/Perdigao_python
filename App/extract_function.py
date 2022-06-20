@@ -10,8 +10,7 @@ import numpy as np
 import pandas as pd
 import time
 
-
-# Extracting from netcdf into a pandas data frame
+# Extracting data from netcdf into a pandas data frame
 # Input args: fi - day code, x - tower code, y - sonic height, n - number of the day in the time series requested (if you want 2 consecutive days, in the first day n=0 and in the second day n=1)
 # Output: df - dataframe containing the variables of interest for that day, tower and sonic
 
@@ -33,11 +32,9 @@ def extract (fi, x, y, n):
 
     direc = data.variables['dir_{}m_{}'.format(y, x)]
     spd = data.variables['spd_{}m_{}'.format(y, x)]
- #   ldiag = data.variables['ldiag_{}m_{}'.format(y, x)]
 
     basetime = data.variables['base_time']
     reltime = data.variables['time']
-
 
     # Creating an empty pandas dataframe
     starting_time = data.variables['time'].units[14:29]+ '2:30'
@@ -59,21 +56,7 @@ def extract (fi, x, y, n):
 
     return df
     
-
-'''
-# Checking if the function is working - Apparently it is
-fi = '20170601'
-y = '10'
-x = 'tnw01'
-n = 1
-z1 = 20170601
-z2 = 20170603
-k= 2
-
-extract(fi, x, y, n)
-
-
-#'''
+# Function that returns an array of integers with the size of the time variable (288), used to be looped when performing operations in the data frames of interest
 
 def extract_2 (fi, x, y):
     
@@ -82,8 +65,7 @@ def extract_2 (fi, x, y):
     dt = np.arange(0, data.variables['time'].size)
     return dt
     
-
-#extract_2(fi, x, y)
+# Function that returns the start time value used for section a data frame
 
 def extract_start_time (z1, k, h):
     
@@ -95,7 +77,7 @@ def extract_start_time (z1, k, h):
     start = data.variables['time'].units[14:25]+ stf
     return start
 
-#extract_start_time(z1, k)
+# Function that returns the end time value used for section a data frame
 
 def extract_end_time (z2, k, h):
     
@@ -109,5 +91,3 @@ def extract_end_time (z2, k, h):
     global end
     end = data.variables['time'].units[14:25]+ e
     return end
-
-#extract_end_time(z2, k)
