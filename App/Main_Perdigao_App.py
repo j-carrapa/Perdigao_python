@@ -5,7 +5,9 @@ Created on Fri May 20 16:15:06 2022
 @author: Joao
 """
 
-# Main first try
+# Main - Top level module, user interface to run sub-modules
+
+# Allows to choose one mode of data gathering, process and export and repeat the operation
 
 g1 = 0
 
@@ -46,44 +48,3 @@ while g1 != 1:
             print("Type correct answer.\n[yes/no]:")
             continue
     continue
-
-
-
-
-
-
-
-
-
-
-
-
-'''
-
-g1 = 0
-
-while g1 != 1:
-    
-    #all the code for 1 sonic
-    
-    g2 = 0
-    
-    while g2 != 1:
-        g_ans = input("End of data gathering?\n[yes/no]:")
-        
-        if g_ans == 'no':
-            g2 = 1
-            continue
-        if g_ans == 'yes':
-            g2 = 1
-            g1 = 1
-            continue
-        else:
-            print("Type correct answer.\n[yes/no]:")
-            continue
-    continue
-
-        
-'''
-    
-    
