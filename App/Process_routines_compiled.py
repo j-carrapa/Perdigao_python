@@ -12,21 +12,11 @@ import save_export_function as se
 import Time_period_adjust as tp
 import Turbulence_parameters as tu
 
-
 def process_routines (dates_def, z1, z2, z3, z4, x, y, k):
     
     '''----- PART 7 ----------'''
-
     
-    #  Call the extraction module and concatenate the data in order, using time as index
-
-    # don't know how to call it from a module, will put everything in this file
-
-    # Reading the netcd file
-    #fi, x and y will be given by the main input
-
-    #try with data_gathering function
-
+    #  Call the data_gathering module that extracts and concatenate the data in order, using time as index
 
     dg.data_gathering(dates_def, z1, z2, x, y)
 
@@ -34,16 +24,15 @@ def process_routines (dates_def, z1, z2, z3, z4, x, y, k):
 
     '''----- PART 8 and 9 ----------'''
     # Add turbulence parameters to the 5 min period data frame.
+    # If pointed, retrieves a new data frame with the time period adjusted to the desired time period (ex.: 15 min)
 
     if k == 1:
         tu.turbulence_5min(dfc)
         dfc = tu.df.copy()
 
-
-    '''----- PART 9 ----------'''
     # If time period is different from 5 min, retrieves a data frame with the mean variables values, according to the time period selected
     # Turbulence parameters are also recalculated, simple mean of turbulence parameters is not accurate
-        
+    
     if k>1:
         
         tu.tke_k(dfc, k)
@@ -60,13 +49,12 @@ def process_routines (dates_def, z1, z2, z3, z4, x, y, k):
         dfc = tu.df1.copy()
 
     '''----- PART 10 ----------'''
-    # If the user asked for a specific time period of the day (ex: from 11h to 17h) this function updates the df to fulfill that order.
+    
+    # If the user asked for a specific time period of the day (ex: from 11h to 17h), or a specific time for begining and/or end, this function updates the df to fulfill that order.
 
     if z3 != 0 or z4 != 24:
         tp.section_time(dfc, z1, z2, z3, z4, k, dates_def)
         dfc = tp.dfnew.copy()
-
-
 
     '''----- PART 11 ----------'''
 
@@ -74,8 +62,3 @@ def process_routines (dates_def, z1, z2, z3, z4, x, y, k):
 
     # When converting the df to a np array the file is loosing the info on the time variable (used as index in the df)
     # Possible solution is create a new df whith  the time series as a column, as well as index
-
-
-
-
-
