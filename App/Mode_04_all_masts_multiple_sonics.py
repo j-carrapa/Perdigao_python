@@ -5,7 +5,7 @@ Created on Fri Jun 10 11:17:11 2022
 @author: João
 """
 
-# # Mode 4 - All masts in choosen heights
+# Mode 4 - All masts in choosen heights
 
 from netCDF4 import Dataset
 import numpy as np
@@ -23,7 +23,6 @@ import Process_routines_compiled as pr
 
 # The array 'dates' will contain all the dates of the days with available data
 
-
 # Fetching the dates arrays from the Dates_array module
 
 dates_16 = da.d16
@@ -31,8 +30,8 @@ dates_tot = da.d
 
 '''----- PART 2 ----------'''
 
-#'''
 # - Ask for the period time of the sample, multiples of 5 min: 5, 10, 15, 20, 30min or 1h, doesn´t accept other time periods
+
 p0 = 0
 
 while p0 != 1:
@@ -52,15 +51,11 @@ period_conv = int(period_val)/5
 
 k = period_conv
 
-
-#'''
-
-
 '''----- PART 3 ----------'''
 
 # Ask for input of which hours of the day are of interest
 # z3 = start hour
-# z3 = ending hour
+# z4 = ending hour
 
 hour_arr = np.arange(0, 25)
 
@@ -93,7 +88,6 @@ while a8 != 1:
         print("Possible ending hours:")
         print(hour_arr[z3+1:25])
     continue
-
 
 '''----- PART 4 ----------'''
 
@@ -137,9 +131,7 @@ while a5 != 1:
     continue
 
 # using defined sart and end dates (z1, z2) to create an array with the defined dates
-# This for cycle is showing an error (dates_def appears first for append than for creation, the fact is that the if line for the append will not ever be executed before the if line for creation). 
-# Is it necessary to create an empty array first???
-#dates_def = np.array(0, dtype = 'i4')
+# This for cycle is showing an error (dates_def appears first for append than for creation, the fact is that the if line for the append will not ever be executed before the if line for creation)
 
 a6 = 0
 
@@ -155,15 +147,15 @@ for q in dates_tot:
 
 # the array dates_def contains all the dates defined by the user for extracting data, every position of the array contains the date of 1 day with the format YYYYMMDD
 
-# Write an input extra function to add dates that are not sequential and to order them in dates_def array
-
 '''----- PART 5 ----------'''
+
+# Download files matching the dates defined by the user
 
 dl.download(dates_def)
 
 '''----- PART 6 ----------'''
    
-# Create input section on wich sonics heights will be extracted
+# Create input section on wich sonics heights the sonics data will be extracted
     
 # Array with tower name code
 
@@ -213,7 +205,6 @@ while a3 != 1:
         
     continue
 
-
 # At this point we have the dates defined by the user and the sonics heights
 
 '''----- PARTS 7-11 ----------'''
@@ -221,7 +212,6 @@ while a3 != 1:
 print("Gathering data and exporting")
 
 # Just to explain user what is happening
-
 
 if y_arr.size > 1:
     
