@@ -7,16 +7,13 @@ Created on Wed May 25 09:03:00 2022
 
 import numpy as np
 
-
 # File containing arrays with the dates used for downloading and extracting data of the netCD fiiles
 
 # The array 'dates' will contain all the dates of the days with available data
 
 dates = np.array([20161129, 20161201, 20161202, 20161205], dtype='i4')
 
-
 i = 7
-
 
 while i<10:
     s = '2016120'+ str(i)
@@ -71,6 +68,7 @@ while j<7:
                 i = i+1
             else:
                 i = 1
+                
     if j == 4 or j == 6:
         while i <10:
             s = '20170' + str(j)+ '0' + str(i)
@@ -85,11 +83,11 @@ while j<7:
                 i = i+1
             else:
                 i = 1
+                
     j = j+1
 
 else:
     dates = np.append(dates, [20170701])
-
 
 dates_tot = dates
 
