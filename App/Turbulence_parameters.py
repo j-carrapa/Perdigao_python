@@ -5,9 +5,12 @@ Created on Tue Jun 14 16:23:29 2022
 @author: Joao
 """
 
-# Turbulence Module - contains functions to calc turbulence parameters
+# Turbulence Module - contains functions to calculate turbulence parameters
 
 import numpy as np
+
+# This function calculates the turbulence parameters tke, ti and tih from the variables on the input data frame (dfc)
+# Outputs a new data frame with the previous variables and the recently calculated turbulence parameters (df)
 
 def turbulence_5min (dfc):
     
@@ -58,7 +61,8 @@ def turbulence_5min (dfc):
     df = dfc.copy()
     return df
 
-
+# This function makes an approximation for the Turbulence Kinetic Energy (tke) when the time period is adjusted (through k)
+# Outputs a numpy array with the calculated approximation of tke for the time period is adjusted
 
 def tke_k (dfc, k):
     
@@ -129,6 +133,8 @@ def tke_k (dfc, k):
     tke_a = tke_arr.copy()
     return tke_a
 
+# This function makes an approximation for the Turbulence Intensity (ti) when the time period is adjusted (through k)
+# Outputs a numpy array with the calculated approximation of ti for the time period is adjusted
 
 def ti_k (dfc, k):
     
@@ -200,8 +206,8 @@ def ti_k (dfc, k):
     ti_a = ti_arr.copy()
     return ti_a
 
-
-
+# This function makes an approximation for the Turbulence Intensity from horizontal components only (tih) when the time period is adjusted (through k)
+# Outputs a numpy array with the calculated approximation of tih for the time period is adjusted
 
 def tih_k (dfc, k):
     
@@ -262,7 +268,8 @@ def tih_k (dfc, k):
     tih_a = tih_arr.copy()
     return tih_a
             
-
+# This function allows to append to the data frame (dfc) the separetely calculated turbulence parameters for time periods different than 5 mins
+# Outputs a new data frame with the previous variables and the recently calculated turbulence parameters (df1)
 
 def turb_append(dfc, tke_arr, ti_arr, tih_arr):
     
