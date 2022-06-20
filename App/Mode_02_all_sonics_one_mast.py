@@ -24,7 +24,6 @@ import Process_routines_compiled as pr
 
 # The array 'dates' will contain all the dates of the days with available data
 
-
 # Fetching the dates arrays from the Dates_array module
 
 dates_16 = da.d16
@@ -32,8 +31,8 @@ dates_tot = da.d
 
 '''----- PART 2 ----------'''
 
-#'''
 # - Ask for the period time of the sample, multiples of 5 min: 5, 10, 15, 20, 30min or 1h, doesn´t accept other time periods
+
 p0 = 0
 
 while p0 != 1:
@@ -53,15 +52,11 @@ period_conv = int(period_val)/5
 
 k = period_conv
 
-
-#'''
-
-
 '''----- PART 3 ----------'''
 
 # Ask for input of which hours of the day are of interest
 # z3 = start hour
-# z3 = ending hour
+# z4 = ending hour
 
 hour_arr = np.arange(0, 25)
 
@@ -94,7 +89,6 @@ while a8 != 1:
         print("Possible ending hours:")
         print(hour_arr[z3+1:25])
     continue
-
 
 '''----- PART 4 ----------'''
 
@@ -138,9 +132,7 @@ while a5 != 1:
     continue
 
 # using defined sart and end dates (z1, z2) to create an array with the defined dates
-# This for cycle is showing an error (dates_def appears first for append than for creation, the fact is that the if line for the append will not ever be executed before the if line for creation). 
-# Is it necessary to create an empty array first???
-#dates_def = np.array(0, dtype = 'i4')
+# This for cycle is showing an error (dates_def appears first for append than for creation, the fact is that the if line for the append will not ever be executed before the if line for creation)
 
 a6 = 0
 
@@ -156,29 +148,26 @@ for q in dates_tot:
 
 # the array dates_def contains all the dates defined by the user for extracting data, every position of the array contains the date of 1 day with the format YYYYMMDD
 
-# Write an input extra function to add dates that are not sequential and to order them in dates_def array
-
 '''----- PART 5 ----------'''
+
+# Download files matching the dates defined by the user
 
 dl.download(dates_def)
 
 '''----- PART 6 ----------'''
    
-# Create input section on wich heights or masts will be extracted
-# this part needs improvement for multiple masts/heights
-    
+# Create input section on wich mast the sonics data will be extracted
 
 # Array with tower name code
 
 t_name = tl.t_n
+
 # Array with tower heights
 
 height = tl.h
 
 # Ask for input of tower code name, the code will not continue until a valid code name is given
 
-
-    
 a1 = 0
 
 while a1 != 1:
@@ -192,20 +181,17 @@ while a1 != 1:
     if a1 != 1:
         print("Code name incorrect")
         
-    continue   
+    continue
           
 # Create an array with the sonics heights available for that tower
 
-
 tl.sonics_available_name(j)
 hei = tl.hei.copy()
-
 
 # x: tower code name
 # hei: array with height code name
 
 # At this point we have the dates defined by the user, the tower and the height relative to every available sonic in that tower
-
 
 '''----- PARTS 7-11 ----------'''
 
