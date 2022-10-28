@@ -9,15 +9,20 @@ Created on Mon Jun  6 16:45:48 2022
 
 # Mode 1 - Chosen sonics per tower and height
 
-'''
-This module extracts, processes and exports data for selected sonics in selected towers in the dates defined by the user
-'''
+'''This module extracts, processes and exports data for selected sonics in selected towers in the dates defined by the user'''
 
-import numpy as np
 import tower_location as tl
 import processing_functions as pr
 import input_functions as ip
 import download as dl
+import pandas as pd
+import numpy as np
+import os.path
+
+'''Initialization of variables'''
+
+coord_index_array = np.array(-1)
+tl.coordinates_file_creation()
 
 '''----- PART 1 ----------'''
 
@@ -104,7 +109,7 @@ if hs == 2:
     sdf = ip.height_selection_hs2(x_arr, j_arr)
 
 
-'''----- PARTS 6-10 ----------'''
+'''----- PARTS 6-12 ----------'''
 
 print("Gathering data and exporting")
 
@@ -138,7 +143,7 @@ if hs == 1:
                         
                         # this function compiles every process of data gathering, calculate turbulence parameters, adjust the time of the samples, adjust the time period through the day and saving and exporting the data for 1 sonic in the designated time period.
 
-                        pr.process_routines(dates_def, z1, z2, z3, z4, x, y, k, sm)
+                        coord_index_array = pr.process_routines(dates_def, z1, z2, z3, z4, x, y, k, sm, coord_index_array)
             
             else:
                 
@@ -149,7 +154,7 @@ if hs == 1:
                     
                     # this function compiles every process of data gathering, calculate turbulence parameters, adjust the time of the samples, adjust the time period through the day and saving and exporting the data for 1 sonic in the designated time period.
 
-                    pr.process_routines(dates_def, z1, z2, z3, z4, x, y, k, sm)
+                    coord_index_array = pr.process_routines(dates_def, z1, z2, z3, z4, x, y, k, sm, coord_index_array)
                 
                     
     else:
@@ -170,7 +175,7 @@ if hs == 1:
                     
                     # this function compiles every process of data gathering, calculate turbulence parameters, adjust the time of the samples, adjust the time period through the day and saving and exporting the data for 1 sonic in the designated time period.
 
-                    pr.process_routines(dates_def, z1, z2, z3, z4, x, y, k, sm)
+                    coord_index_array = pr.process_routines(dates_def, z1, z2, z3, z4, x, y, k, sm, coord_index_array)
         
         else:
             
@@ -181,7 +186,7 @@ if hs == 1:
                 
                 # this function compiles every process of data gathering, calculate turbulence parameters, adjust the time of the samples, adjust the time period through the day and saving and exporting the data for 1 sonic in the designated time period.
 
-                pr.process_routines(dates_def, z1, z2, z3, z4, x, y, k, sm)
+                coord_index_array = pr.process_routines(dates_def, z1, z2, z3, z4, x, y, k, sm, coord_index_array)
             
 
 if hs == 2:
@@ -209,7 +214,7 @@ if hs == 2:
                     y = int(y)
                     # this function compiles every process of data gathering, calculate turbulence parameters, adjust the time of the samples, adjust the time period through the day and saving and exporting the data for 1 sonic in the designated time period.
 
-                    pr.process_routines(dates_def, z1, z2, z3, z4, x, y, k, sm)
+                    coord_index_array = pr.process_routines(dates_def, z1, z2, z3, z4, x, y, k, sm, coord_index_array)
                 
             else:
                 
@@ -217,7 +222,7 @@ if hs == 2:
                 
                 # this function compiles every process of data gathering, calculate turbulence parameters, adjust the time of the samples, adjust the time period through the day and saving and exporting the data for 1 sonic in the designated time period.
 
-                pr.process_routines(dates_def, z1, z2, z3, z4, x, y, k, sm)
+                coord_index_array = pr.process_routines(dates_def, z1, z2, z3, z4, x, y, k, sm, coord_index_array)
 
     else:
         x = str(x_arr)
@@ -232,7 +237,7 @@ if hs == 2:
                 #y = int(y)
                 # this function compiles every process of data gathering, calculate turbulence parameters, adjust the time of the samples, adjust the time period through the day and saving and exporting the data for 1 sonic in the designated time period.
 
-                pr.process_routines(dates_def, z1, z2, z3, z4, x, y, k, sm)
+                coord_index_array = pr.process_routines(dates_def, z1, z2, z3, z4, x, y, k, sm, coord_index_array)
             
         else:
             
@@ -240,4 +245,22 @@ if hs == 2:
             
             # this function compiles every process of data gathering, calculate turbulence parameters, adjust the time of the samples, adjust the time period through the day and saving and exporting the data for 1 sonic in the designated time period.
 
-            pr.process_routines(dates_def, z1, z2, z3, z4, x, y, k, sm)
+            coord_index_array = pr.process_routines(dates_def, z1, z2, z3, z4, x, y, k, sm, coord_index_array)
+            
+
+'''----- PART 13 ----------'''
+
+df_coord = pd.read_csv ('sonics_coord_est_nor_z.csv', usecols= ['Easting','Northing','Z','sonic'])
+
+coord_index_array = np.unique(coord_index_array)
+coord_index_array = coord_index_array[1:]
+
+df_sonics = df_coord.loc[coord_index_array]
+
+direc = r'C:\Users\Baba\Desktop\João\Tese\Python\Teste_1\Perdigao_python\App 2.0\data_pf'
+
+df_sonics.to_csv(os.path.join(r'{}'.format(direc),'selected_sonics_coordinates.csv'))
+
+df_sonics.to_excel(os.path.join(r'{}'.format(direc),'selected_sonics_coordinates.xls'))
+
+df_sonics.to_csv(os.path.join(r'{}'.format(direc),'selected_sonics_coordinates.dat'), sep = " ", index=False, header=False)

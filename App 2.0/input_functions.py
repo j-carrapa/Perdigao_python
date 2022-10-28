@@ -7,11 +7,11 @@ Created on Tue Jun 21 17:59:08 2022
 
 # Status: Reviewed
 
+# This module contains the input routines defined as functions
+
 import numpy as np
 import dates_array
 import tower_location as tl
-
-# This module contains the input routines defined as functions
 
 # Time period - Ask for the period time of the sample, multiples of 5 min: 5, 10, 15, 20, 30min or 1h, doesn´t accept other time periods
 

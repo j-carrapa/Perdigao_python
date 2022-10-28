@@ -5,7 +5,7 @@ Created on Fri May 20 16:15:06 2022
 @author: Joao
 """
 
-# Falta refazer mode 2 e 3 e limpar main. mode 1 já está
+# Status: Reviewed
 
 # Main - Top level module, user interface to run sub-modules
 
