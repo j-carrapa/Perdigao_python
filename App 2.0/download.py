@@ -27,3 +27,4 @@ def download (dates_def):
             r = requests.get(url)
             open(str(date)+'.nc','wb').write(r.content)
 
+

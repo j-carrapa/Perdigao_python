@@ -20,6 +20,12 @@ def extract (fi, x, y, n):
     # n is used to garantee continuous data in the time stamp variable 'time'
     data = Dataset("{}.nc".format(fi) , 'r')
     
+    if x == 'tnw12' or x == 'tnw13' or x == 'tnw14' or x == 'tnw15' or x == 'tnw16':
+        
+        if y == 30:
+            
+            y = 28
+    
     # Storing the netCDF data into variables
 
     u = data.variables['u_{}m_{}'.format(y, x)]
@@ -81,7 +87,7 @@ def extract_start_time (z1, k, h):
 #extract_end_time(z2, k)
 
 def extract_end_time (z2, k, h):
-    '''Takes day (int), period conversion constant (int) and start hour (int), Returns first period time data (str)'''    
+    '''Takes day (int), period conversion constant (int) and start hour (int), Returns last period time data (str)'''    
     data = Dataset("{}.nc".format(z2) , 'r')
     
     en = 86400 - (150*k + (24-h)*3600)
