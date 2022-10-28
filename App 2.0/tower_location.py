@@ -11,6 +11,11 @@ Created on Wed May 11 15:33:47 2022
 
 from netCDF4 import Dataset
 import numpy as np
+import pandas as pd
+import download as dl
+
+date = np.array([20170614])
+dl.download(date)
 
 # Array containing all towers names
 
@@ -20,12 +25,23 @@ def towers_name ():
     return t_name
 
 
+# Tower index position by name
+
+def tower_index_pos(name):
+    '''Takes tower name, Returns tower index position in tower name array (int)'''
+    t_name = towers_name()
+    j = np.where(t_name == name)
+    j = int(j[0])
+    
+    return j
+
+
 # Function returns a 2D np array that contains 2 1D np arrays, the first contains the lat for every tower and the second contains the lon
 
 def lat_lon_towers ():
     '''Takes none, Returns 2D np array with lat and lon arrays (np arrays of float)'''
     # Reading the netcd file
-    data = Dataset("isfs_qc_tiltcor_20170601.nc", 'r')
+    data = Dataset("20170614.nc", 'r')
 
     t_name = towers_name()
 
@@ -112,7 +128,7 @@ def sonics_height_array ():
     '''Takes none, Returns array with sonics heights (np array of string)'''
     # 2m, 4m, 6m, 8m, 10m, 12m, 20m, 30m, 40m, 60m, 80m, 100,
 
-    height = np.array(["2", "4", "6", "8", "10", "20", "30", "40", "60", "80", "100"])
+    height = np.array(["2", "4", "6", "8", "10", "12", "20", "30", "40", "60", "80", "100"])
     
     return height
 
@@ -123,7 +139,7 @@ def sonics_towers_map ():
     '''Takes none, Returns np 2D array with availability of sonics for each tower (np array of int)'''
     # This 2D array is initiallized with zeros "0"
 
-    m = np.zeros((11,50))
+    m = np.zeros((12,50))
 
     # This 'for loop' will check in each tower, if there are wind speed values for the different heights. If true, it will change the 'm' array from '0' to '1' in the correspondent position for the height in each tower
     # In the end, the 'm' array contains boolean info on whether or not one specific tower has a sonic in a specific heihgt, for every tower, and every heights
@@ -133,7 +149,7 @@ def sonics_towers_map ():
     height = sonics_height_array()
     
     # Reading the netcd file
-    data = Dataset("isfs_qc_tiltcor_20170601.nc", 'r')
+    data = Dataset("20170614.nc", 'r')
 
     j = 0
 
@@ -142,6 +158,15 @@ def sonics_towers_map ():
         i = 0
         
         for b in height:
+            
+            b = int(b)
+            
+            if a == "tnw12" or a == "tnw13" or a == "tnw14" or a == "tnw15" or a == "tnw16":
+                
+                if b == 30:
+                    
+                    b = 28
+                    
             try:
                 u = data.variables['u_{}m_{}'.format(b, a)][:]
 
@@ -205,13 +230,13 @@ def tower_available (d):
 # function retrieves an array with sonics heights available for a given tower
 
 def sonics_available_name (j):
-    '''Takes tower position in towers array (int), Returns array with sonics heights (np array of int)'''
-    he = np.empty([11], dtype=int)
+    '''Takes tower position in towers array (int), Returns array with sonics heights available (np array of int)'''
+    he = np.empty([12], dtype=int)
     height = sonics_height_array()
     m = sonics_towers_map()
     v = 0
     i = 0
-    while i < 11:
+    while i < 12:
         if m[i,j] == 1:
         
             he[v] = height[i]
@@ -227,7 +252,7 @@ def sonics_available_name (j):
 # function retrieves an array with towers names available for a given sonic height
 
 def tower_avaliable_name (i):
-    '''Takes sonic position in sonics height array (int), Returns array with available towers names (np array of string)'''
+    '''Takes sonic position in sonicsz height array (int), Returns array with available towers names (np array of string)'''
     to = towers_name().copy()
     t_name = towers_name()
     m = sonics_towers_map()
@@ -261,3 +286,113 @@ def height_index (y):
         a += 1
     return i
     
+
+# Creates a file with all sonics coordinates
+
+
+def coordinates_file_creation():
+    '''Takes none, Returns data frame containing all sonics coordinates (PT-TM06/ETRS89, height, sonic name) (Pandas Data Frame)'''
+    file_name = r'C:\Users\Baba\Desktop\João\Tese\Python\Teste_1\Perdigao_python\App 2.0\raw_files\Relatorio_sonics_data.xlsx'
+    sheet =  'Sheet1'
+
+    df = pd.read_excel(io=file_name, sheet_name=sheet)
+
+    index_array = np.array(-1)
+    index_array2 = np.array(-1)
+
+    lk = np.arange(0,258)
+
+    for i in lk:
+        
+        s = df.iat[i,0]
+        s1 = s[0]
+        
+        try:
+            a = int(s1)
+            
+        except:
+            index_array = np.append(index_array, i)
+            
+        else:
+            index_array2 = np.append(index_array2, i)
+            
+        finally:
+            
+            continue
+            
+    index_array = index_array[1:]
+    index_array2 = index_array2[1:]
+
+
+    df = df.loc[index_array2]
+    df = df.reset_index()
+    del df['index']
+
+    lp = np.arange(0,185)
+
+    a=0
+
+    for i in lp:
+        
+        if i < 183:
+            
+            s = df.iat[i,0]
+            c = 'm'
+            
+            j = s.find(c)
+            
+            s = s[j+2:]
+            se = float(s[0:2] + s[3:9])
+            sn = float(s[10:17])
+            
+            if a == 1:
+                
+                est = np.append(est,se)
+                nor = np.append(nor,sn)
+            
+            if a == 0:
+                
+                est = np.array(se)
+                nor = np.array(sn)
+                a = 1
+            
+            df.iat[i,0] = s
+            
+            
+        if i > 182:
+            
+            s = df.iat[i,0]
+            c = 'm'
+            
+            j = s.find(c)
+            
+            s = s[j+6:]
+            se = float(s[0:2] + s[3:9])
+            sn = float(s[10:17])
+            
+            est = np.append(est,se)
+            nor = np.append(nor,sn)
+            
+            df.iat[i,0] = s
+        
+    df['Easting'] = est
+    df['Northing'] = nor
+
+    df2 = pd.read_csv(r'C:\Users\Baba\Desktop\João\Tese\Python\Teste_1\Perdigao_python\App 2.0\raw_files\sonics_coord_corrected.csv')
+
+    z = df2.loc[:,'Z']
+    sonic = df2.loc[:,'sonic']
+
+    df['Z'] = z
+    df['sonic'] = sonic
+
+    del df['sonics']
+
+    df.to_csv('sonics_coord_est_nor_z.csv', index=False)
+
+    #df.to_excel('sonics_coordinates.xls')
+
+    df.to_csv('sonics_coord_est_nor_z.dat', sep = " ", index=False, header=False)
+    
+    return df
+
